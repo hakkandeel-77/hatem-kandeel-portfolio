@@ -8,8 +8,16 @@ function App() {
   const [selectedCert, setSelectedCert] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [lang, setLang] = useState('en');
+  const [expandedGalleries, setExpandedGalleries] = useState({});
   const isAr = lang === 'ar';
   const audioRef = useRef(null);
+
+  const toggleGallery = (projectId) => {
+    setExpandedGalleries(prev => ({
+      ...prev,
+      [projectId]: !prev[projectId]
+    }));
+  };
 
   const titlesEn = [
     'Senior Business Development & Commercial Manager',
@@ -165,7 +173,7 @@ function App() {
     { icon:'🔒', name:'Security & Surveillance Systems', level:90, desc:'Full technical expertise in CCTV, access control, and security system installation, programming and maintenance' },
     { icon:'🗂️', name:'CRM Systems & Strategy', level:85, desc:'Managing and optimizing CRM platforms to improve lead tracking, client follow-up, and sales performance' },
     { icon:'📊', name:'Data Analysis', level:85, desc:'Analyzing business data using Excel and Power BI to extract insights and support strategic decision-making' },
-    { icon:'💹', name:'Power BI', level:80, desc:'Building interactive dashboards and reports to visualize KPIs and business performance metrics' },
+    { icon:'💹', name:'Power BI', level:90, desc:'Building interactive dashboards and reports using Star Schema, advanced DAX measures, forecasting, and What-If analysis to visualize KPIs and drive strategic decision-making' },
     { icon:'📋', name:'Advanced Excel', level:85, desc:'Advanced formulas, pivot tables, data modeling, conditional formatting, and automated reporting' },
     { icon:'🎯', name:'Project Management', level:85, desc:'Planning, executing, and monitoring projects from initiation to delivery using structured methodologies' },
     { icon:'⚙️', name:'Operations Management', level:85, desc:'Streamlining business operations using the 4Ds framework: Define, Design, Deliver, Develop' },
@@ -187,7 +195,7 @@ function App() {
     { icon:'🔒', name:'أنظمة الأمن والمراقبة', level:90, desc:'خبرة تقنية كاملة في كاميرات المراقبة والتحكم في الوصول وتركيب أنظمة الأمن وبرمجتها وصيانتها' },
     { icon:'🗂️', name:'أنظمة CRM والاستراتيجية', level:85, desc:'إدارة وتحسين منصات CRM لتحسين تتبع العملاء المحتملين ومتابعة العملاء وأداء المبيعات' },
     { icon:'📊', name:'تحليل البيانات', level:85, desc:'تحليل بيانات الأعمال باستخدام Excel وPower BI لاستخراج الرؤى ودعم اتخاذ القرارات الاستراتيجية' },
-    { icon:'💹', name:'Power BI', level:80, desc:'بناء لوحات بيانات وتقارير تفاعلية لتصور مؤشرات الأداء الرئيسية ومقاييس أداء الأعمال' },
+    { icon:'💹', name:'Power BI', level:90, desc:'بناء لوحات بيانات وتقارير تفاعلية باستخدام Star Schema ومقاييس DAX متقدمة والتنبؤات وتحليل ماذا لو لتصور مؤشرات الأداء الرئيسية ودعم القرارات الاستراتيجية' },
     { icon:'📋', name:'Excel المتقدم', level:85, desc:'الصيغ المتقدمة وجداول Pivot ونمذجة البيانات والتنسيق الشرطي والتقارير الآلية' },
     { icon:'🎯', name:'إدارة المشاريع', level:85, desc:'تخطيط وتنفيذ ومراقبة المشاريع من البداية حتى التسليم باستخدام منهجيات منظمة' },
     { icon:'⚙️', name:'إدارة العمليات', level:85, desc:'تبسيط عمليات الأعمال باستخدام إطار 4Ds: التعريف والتصميم والتسليم والتطوير' },
@@ -399,7 +407,7 @@ function App() {
         </h1>
         <div style={{fontSize:'1.2rem', color:'#C9A84C', minHeight:'40px', marginBottom:'20px'}}>{text}<span>|</span></div>
         <p style={{color:'#8899cc', fontSize:'1rem', maxWidth:'600px', lineHeight:'1.8'}}>
-          {isAr ? 'أكثر من 20 عامًا في قيادة نمو الأعمال عبر أنظمة الأمن والشراكات الاستراتيجية ومشاريع التنمية الدولية.' : '20+ years of driving business growth across security systems, strategic partnerships, and international development projects.'}
+          {isAr ? 'قائد تجاري يدمج الخبرة العملية مع ذكاء الأعمال والاستراتيجية المبنية على البيانات' : 'Commercial Leader transitioning into Business Intelligence & Data-Driven Strategy'}
         </p>
         <div style={{display:'flex', gap:'15px', marginTop:'40px', flexWrap:'wrap', justifyContent:'center'}}>
           <a href="#contact" style={{backgroundColor:'#C9A84C', color:'#0a0f2e', padding:'14px 35px', borderRadius:'4px', textDecoration:'none', fontWeight:'700', fontSize:'15px', letterSpacing:'1px'}}>
@@ -646,28 +654,410 @@ function App() {
           <p style={{color:'#C9A84C', letterSpacing:'3px', fontSize:'13px', marginBottom:'10px', textAlign:'center'}}>
             {isAr ? 'أعمالي' : 'MY WORK'}
           </p>
-          <h2 style={{fontSize:'2.5rem', fontWeight:'700', marginBottom:'60px', textAlign:'center', background:'linear-gradient(135deg, #ffe082, #C9A84C)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>
+          <h2 style={{fontSize:'2.5rem', fontWeight:'700', marginBottom:'20px', textAlign:'center', background:'linear-gradient(135deg, #ffe082, #C9A84C)', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>
             {isAr ? 'المشاريع والمحتوى' : 'Projects & Content'}
           </h2>
-
-          {/* Power BI Dashboard */}
-          <div style={{marginBottom:'80px'}}>
-            <h3 style={{color:'#C9A84C', fontSize:'1.1rem', letterSpacing:'2px', marginBottom:'10px'}}>
-              {isAr ? '📊 مشروع تحليل البيانات بـ Power BI' : '📊 POWER BI DATA ANALYSIS PROJECT'}
+          
+          {/* Intro Text */}
+          <div style={{textAlign:'center', maxWidth:'800px', margin:'0 auto 60px'}}>
+            <h3 style={{fontSize:'1.3rem', color:'#C9A84C', fontWeight:'600', marginBottom:'15px', lineHeight:'1.6'}}>
+              {isAr 
+                ? 'محفظة أعمال ذكاء الأعمال والتحليل'
+                : 'Business Intelligence & Analytics Portfolio'}
             </h3>
-            <p style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8', marginBottom:'30px'}}>
+            <p style={{color:'#aabbdd', fontSize:'0.95rem', lineHeight:'1.8'}}>
               {isAr
-                ? 'لوحة بيانات شاملة لتحليل مبيعات التجزئة مبنية بـ Power BI — تحليل أداء خطوط المنتجات ومقارنة الفروع والدخل الإجمالي وتقييمات العملاء عبر أشهر ومواقع متعددة.'
-                : 'A comprehensive retail sales analysis dashboard built with Power BI — analyzing product line performance, branch comparison, gross income, and customer ratings across multiple months and locations.'}
+                ? 'أجمع بين خبرة تجارية تتجاوز 20 عامًا وأدوات التحليل وذكاء الأعمال الحديثة لتحويل البيانات إلى قرارات استراتيجية.'
+                : 'Combining 20+ years of commercial leadership with modern BI and analytics tools to turn business data into strategic decisions.'}
             </p>
-            <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(300px, 1fr))', gap:'15px', marginBottom:'30px'}}>
-              {['dashboard1.png','dashboard2.png','dashboard3.png','dashboard4.png','dashboard5.png','dashboard6.png','dashboard7.png'].map((img, i) => (
-                <img key={i} src={process.env.PUBLIC_URL + `/projects/${img}`} alt={`Dashboard ${i+1}`}
-                  loading="lazy" style={{width:'100%', borderRadius:'8px', border:'1px solid rgba(201,168,76,0.2)', cursor:'pointer', transition:'all 0.3s'}}
-                  onMouseOver={e => { e.currentTarget.style.borderColor='#C9A84C'; e.currentTarget.style.transform='scale(1.02)'; }}
-                  onMouseOut={e => { e.currentTarget.style.borderColor='rgba(201,168,76,0.2)'; e.currentTarget.style.transform='scale(1)'; }}
-                />
-              ))}
+          </div>
+
+          {/* SPORTS COMPANY PROJECT - FEATURED */}
+          <div style={{marginBottom:'80px', padding:'40px', backgroundColor:'#0d1540', borderRadius:'12px', border:'2px solid #C9A84C'}}>
+            <div style={{display:'flex', gap:'10px', alignItems:'center', marginBottom:'15px'}}>
+              <span style={{backgroundColor:'#C9A84C', color:'#0a0f2e', padding:'6px 14px', borderRadius:'20px', fontSize:'12px', fontWeight:'700', letterSpacing:'1px'}}>
+                {isAr ? '⭐ مشروع ذكاء أعمال مميز' : '⭐ FEATURED BI PROJECT'}
+              </span>
+            </div>
+            <h3 style={{color:'#C9A84C', fontSize:'1.5rem', letterSpacing:'1px', marginBottom:'20px', fontWeight:'700'}}>
+              {isAr ? '⚽ تحليل مبيعات وربحية شركة رياضية | Power BI' : '⚽ Sports Company Sales & Profitability Analysis | Power BI'}
+            </h3>
+
+            {/* Overview */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'10px', letterSpacing:'1px'}}>
+                {isAr ? '📋 نظرة عامة' : '📋 OVERVIEW'}
+              </h4>
+              <p style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8', marginBottom:'15px'}}>
+                {isAr
+                  ? 'طورت حلاً شاملاً للذكاء الأعمالي لشركة متخصصة في الملابس الرياضية في المملكة المتحدة، مع تحليل أكثر من 8,300 معاملة بيع عبر إنجلترا واسكتلندا وويلز بين عامي 2018 و2021. بنيت لوحة بيانات احترافية في Power BI تتضمن 24 صفحة تفاعلية، مستخدماً Star Schema لنمذجة البيانات، وتحويلات Power Query، و16 مقياساً متقدماً في DAX لكشف رؤى الأعمال ودعم اتخاذ القرارات الاستراتيجية.'
+                  : 'Developed a comprehensive Business Intelligence solution for a UK-based sports apparel company, analyzing over 8,300 sales transactions across England, Scotland, and Wales between 2018 and 2021. Built a professional Power BI dashboard consisting of 24 interactive pages, utilizing Star Schema data modeling, Power Query transformations, and 16 advanced DAX measures to uncover business insights and support strategic decision-making.'}
+              </p>
+              <p style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8'}}>
+                {isAr
+                  ? 'قدم المشروع تقييماً شاملاً للأداء يغطي الإيرادات والربحية وأداء المنتجات وفعالية تجار التجزئة والتوزيع الجغرافي وتحليل المخاطر والتنبؤات وتصميم سيناريوهات ماذا لو. حددت النتائج الرئيسية £7.08 مليون في الإيرادات، £3.82 مليون في الأرباح، هامش ربح بنسبة 53.96%، واكتشفت فرصاً تبلغ قيمتها أكثر من £1.8 مليون من خلال التوسع في السوق وتحسين التسعير.'
+                  : 'The project delivered a full performance assessment covering revenue, profitability, product performance, retailer effectiveness, geographic distribution, risk analysis, forecasting, and What-If scenario modeling. Key findings identified £7.08M in revenue, £3.82M in profit, a 53.96% profit margin, and uncovered opportunities worth more than £1.8M through market expansion and pricing optimization.'}
+              </p>
+            </div>
+
+            {/* Key Findings & Metrics */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'10px', letterSpacing:'1px'}}>
+                {isAr ? '📊 النتائج الرئيسية والمقاييس' : '📊 KEY FINDINGS & METRICS'}
+              </h4>
+              <ul style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8', marginBottom:'15px', paddingLeft:'20px'}}>
+                {isAr
+                  ? [
+                      'الإيرادات الإجمالية: £7.08 مليون',
+                      'إجمالي الأرباح: £3.82 مليون',
+                      'هامش الربح: 53.96%',
+                      'فرص النمو المحددة: أكثر من £1.8 مليون',
+                      'فرص زيادة الربح من خلال تحسين الخصومات: £360K'
+                    ].map((item, i) => <li key={i}>{item}</li>)
+                  : [
+                      'Total Revenue: £7.08M',
+                      'Total Profit: £3.82M',
+                      'Profit Margin: 53.96%',
+                      'Identified Growth Opportunities: £1.8M+',
+                      'Potential Profit Increase via Discount Optimization: £360K'
+                    ].map((item, i) => <li key={i}>{item}</li>)
+                }
+              </ul>
+            </div>
+
+            {/* Key Features */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'10px', letterSpacing:'1px'}}>
+                {isAr ? '⚙️ المميزات الرئيسية' : '⚙️ KEY FEATURES'}
+              </h4>
+              <ul style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8', marginBottom:'15px', paddingLeft:'20px'}}>
+                {isAr
+                  ? [
+                      'نمذجة البيانات باستخدام معمارية Star Schema',
+                      'مقاييس DAX متقدمة ومؤشرات الأداء الرئيسية',
+                      'ملخص تنفيذي ورؤى استراتيجية',
+                      'تحليل المبيعات والربحية وأداء المنتجات',
+                      'تقييم تجار التجزئة وقنوات التوزيع',
+                      'التحليل الجغرافي مع الخرائط التفاعلية',
+                      'إطار عمل تقييم المخاطر',
+                      'محاكاة الربح وتحليل ماذا لو',
+                      'التنبؤ بالمبيعات حتى عام 2030',
+                      'صفحات تفصيلية ديناميكية وفلاتر تفاعلية'
+                    ].map((item, i) => <li key={i}>{item}</li>)
+                  : [
+                      'Data Modeling using Star Schema Architecture',
+                      'Advanced DAX Measures & KPIs',
+                      'Executive Summary & Strategic Insights',
+                      'Sales, Profitability & Product Performance Analysis',
+                      'Retailer & Distribution Channel Evaluation',
+                      'Geographic Analysis with Interactive Maps',
+                      'Risk Assessment Framework',
+                      'What-If Profit Simulation',
+                      'Sales Forecasting through 2030',
+                      'Interactive Drill-Through Pages & Dynamic Filters'
+                    ].map((item, i) => <li key={i}>{item}</li>)
+                }
+              </ul>
+            </div>
+
+            {/* Business Impact */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'10px', letterSpacing:'1px'}}>
+                {isAr ? '💼 تأثير العمل' : '💼 BUSINESS IMPACT'}
+              </h4>
+              <ul style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8', marginBottom:'15px', paddingLeft:'20px'}}>
+                {isAr
+                  ? [
+                      'تحديد زيادة الأرباح المحتملة بقيمة £360K من خلال تحسين الخصومات',
+                      'الكشف عن فرص النمو بقيمة £1.2 مليون–£1.8 مليون في المناطق ذات الاختراق المنخفض',
+                      'إبراز مخاطر التركيز على المنتجات وفرص التنويع',
+                      'تقديم توصيات على مستوى تنفيذي مدعومة برؤى مبنية على البيانات'
+                    ].map((item, i) => <li key={i}>{item}</li>)
+                  : [
+                      'Identified £360K potential profit increase through discount optimization',
+                      'Revealed £1.2M–£1.8M growth opportunities in underpenetrated regions',
+                      'Highlighted product concentration risks and diversification opportunities',
+                      'Delivered executive-level recommendations supported by data-driven insights'
+                    ].map((item, i) => <li key={i}>{item}</li>)
+                }
+              </ul>
+            </div>
+
+            {/* Tools & Technologies */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'10px', letterSpacing:'1px'}}>
+                {isAr ? '🛠️ الأدوات والتقنيات' : '🛠️ TOOLS & TECHNOLOGIES'}
+              </h4>
+              <p style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8'}}>
+                {isAr
+                  ? 'Power BI • Power Query • DAX • نمذجة البيانات • Star Schema • تصور البيانات • ذكاء الأعمال • التنبؤ • تحليل ماذا لو • تطوير مؤشرات الأداء الرئيسية'
+                  : 'Power BI • Power Query • DAX • Data Modeling • Star Schema • Data Visualization • Business Intelligence • Forecasting • What-If Analysis • KPI Development'}
+              </p>
+            </div>
+
+            {/* Image Gallery */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'20px', letterSpacing:'1px'}}>
+                {isAr ? '📸 معرض الصور' : '📸 IMAGE GALLERY'}
+              </h4>
+              <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(260px, 1fr))', gap:'15px', marginBottom:'20px'}}>
+                {[
+                  '1- Cover Page.png',
+                  '2- Project Overview.png',
+                  '3- Executive Insights.png',
+                  '4- Risks & Warnings.png',
+                  '5- Recommendations.png',
+                  '6- KPI Dashboard.png',
+                  ...(expandedGalleries.sports ? [
+                    '7- Executive Summary.png',
+                    '8- Time Analysis.png',
+                    '9- Time Analysis2.png',
+                    '10- Product Analysis.png',
+                    '11- Sales Analysis.png',
+                    '12- Sales Analysis 2.png',
+                    '13- Sales Analysis 3.png',
+                    '14- Retailer & Channel.png',
+                    '15- Retailer & Channel 2.png',
+                    '16- Retailer & Channel 3.png',
+                    '17- Geographic View.png',
+                    '18- Geographic View map 2.png',
+                    '19- Geographic View map 3.png',
+                    '20- Sales Forecast.png',
+                    '21- What-If Analysis.png',
+                    '22- Category Detail.png',
+                    '32- Conclusions.png'
+                  ] : [])
+                ].map((img, i) => (
+                  <img key={i} src={process.env.PUBLIC_URL + "/projects2/" + encodeURIComponent(img)} alt={`Sports Analysis ${i+1}`}
+                    loading="lazy" style={{width:'100%', borderRadius:'8px', border:'1px solid rgba(201,168,76,0.3)', cursor:'pointer', transition:'all 0.3s'}}
+                    onMouseOver={e => { e.currentTarget.style.borderColor='#C9A84C'; e.currentTarget.style.transform='scale(1.02)'; }}
+                    onMouseOut={e => { e.currentTarget.style.borderColor='rgba(201,168,76,0.3)'; e.currentTarget.style.transform='scale(1)'; }}
+                  />
+                ))}
+              </div>
+              <button onClick={() => toggleGallery('sports')} style={{backgroundColor:'#C9A84C', color:'#0a0f2e', border:'none', padding:'10px 24px', borderRadius:'6px', fontSize:'0.9rem', fontWeight:'600', cursor:'pointer', transition:'all 0.3s'}}>
+                {expandedGalleries.sports ? (isAr ? 'إخفاء المزيد' : 'Show Less') : (isAr ? 'عرض المزيد (17+)' : 'Show More (17+)')}
+              </button>
+            </div>
+
+            {/* Video */}
+            <div style={{position:'relative', paddingBottom:'56.25%', height:0, borderRadius:'12px', overflow:'hidden', border:'1px solid rgba(201,168,76,0.3)'}}>
+              <iframe src="https://www.youtube.com/embed/KiHd3Ksw59Q" title={isAr ? 'فيديو تحليل الشركة الرياضية' : 'Sports Company Analysis Video'}
+                style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}}
+                loading="lazy" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen/>
+            </div>
+          </div>
+
+          {/* ============ RETAIL PROJECT ============ */}
+          <div style={{marginBottom:'80px', backgroundColor:'#0d1540', borderRadius:'16px', padding:'40px', border:'2px solid rgba(201,168,76,0.4)'}}>
+            {/* Badge */}
+            <div style={{display:'inline-block', backgroundColor:'rgba(201,168,76,0.2)', color:'#C9A84C', padding:'6px 16px', borderRadius:'20px', fontSize:'0.75rem', fontWeight:'700', letterSpacing:'1px', marginBottom:'20px', border:'1px solid #C9A84C'}}>
+              {isAr ? '📊 مشروع BI' : '📊 BI PROJECT'}
+            </div>
+            
+            <h3 style={{color:'#ffe082', fontSize:'1.4rem', fontWeight:'700', marginBottom:'10px', lineHeight:'1.4'}}>
+              {isAr ? 'لوحة تحليل أداء مبيعات التجزئة | Power BI' : 'Retail Sales Performance Dashboard | Power BI'}
+            </h3>
+
+            {/* Overview */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'10px', letterSpacing:'1px'}}>
+                {isAr ? '📋 نظرة عامة' : '📋 OVERVIEW'}
+              </h4>
+              <p style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8', marginBottom:'15px'}}>
+                {isAr
+                  ? 'لوحة بيانات شاملة لتحليل مبيعات التجزئة مبنية بـ Power BI مع تحليل متعمق لأداء خطوط المنتجات ومقارنة الفروع والدخل الإجمالي وتقييمات العملاء عبر أشهر ومواقع متعددة. توفر اللوحة رؤى قابلة للعمل لتحسين استراتيجية المبيعات والتخطيط الكميات وتحسين الأداء.'
+                  : 'A comprehensive retail sales analysis dashboard built with Power BI featuring in-depth analysis of product line performance, branch comparison, gross income, and customer ratings across multiple months and locations. The dashboard provides actionable insights to improve sales strategy, inventory planning, and operational performance.'}
+              </p>
+            </div>
+
+            {/* Key Findings & Metrics */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'10px', letterSpacing:'1px'}}>
+                {isAr ? '📊 الميزات الرئيسية' : '📊 KEY FEATURES'}
+              </h4>
+              <ul style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8', marginBottom:'15px', paddingLeft:'20px'}}>
+                {isAr
+                  ? [
+                      'تحليل المبيعات حسب الفرع والمنطقة الجغرافية',
+                      'مقارنة أداء خطوط المنتجات',
+                      'مراقبة الدخل الإجمالي والهوامش',
+                      'تقييمات العملاء والتحليل النوعي',
+                      'التنبيهات التلقائية للانحرافات عن الأهداف',
+                      'فلاتر ديناميكية للتحليل التفصيلي'
+                    ].map((item, i) => <li key={i}>{item}</li>)
+                  : [
+                      'Sales Analysis by Branch & Geographic Region',
+                      'Product Line Performance Comparison',
+                      'Gross Income & Margin Monitoring',
+                      'Customer Ratings & Qualitative Analysis',
+                      'Automated Alerts for Target Deviations',
+                      'Dynamic Filters for Detailed Analysis'
+                    ].map((item, i) => <li key={i}>{item}</li>)
+                }
+              </ul>
+            </div>
+
+            {/* Business Impact */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'10px', letterSpacing:'1px'}}>
+                {isAr ? '💼 تأثير العمل' : '💼 BUSINESS IMPACT'}
+              </h4>
+              <p style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8'}}>
+                {isAr
+                  ? 'تحسين الرؤية الإجمالية على الأداء بالوقت الفعلي، تسريع اتخاذ القرارات التشغيلية، وتحسين فرص المبيعات من خلال الرؤى القائمة على البيانات.'
+                  : 'Enhanced visibility into real-time performance metrics, accelerated operational decision-making, and improved sales opportunities through data-driven insights.'}
+              </p>
+            </div>
+
+            {/* Tools & Technologies */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'10px', letterSpacing:'1px'}}>
+                {isAr ? '🛠️ الأدوات والتقنيات' : '🛠️ TOOLS & TECHNOLOGIES'}
+              </h4>
+              <p style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8'}}>
+                Power BI • DAX • Power Query • Data Modeling • Real-time Analytics • KPI Development
+              </p>
+            </div>
+
+            {/* Image Gallery */}
+            <div>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'20px', letterSpacing:'1px'}}>
+                {isAr ? '📸 لقطات لوحة التحكم' : '📸 DASHBOARD SCREENSHOTS'}
+              </h4>
+              <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(260px, 1fr))', gap:'15px', marginBottom:'20px'}}>
+                {[
+                  'dashboard1.png',
+                  'dashboard2.png',
+                  'dashboard3.png',
+                  'dashboard4.png',
+                  'dashboard5.png',
+                  'dashboard6.png',
+                  ...(expandedGalleries.retail ? ['dashboard7.png'] : [])
+                ].map((img, i) => (
+                  <img key={i} src={process.env.PUBLIC_URL + `/projects/${img}`} alt={`Dashboard ${i+1}`}
+                    loading="lazy" style={{width:'100%', borderRadius:'8px', border:'1px solid rgba(201,168,76,0.3)', cursor:'pointer', transition:'all 0.3s'}}
+                    onMouseOver={e => { e.currentTarget.style.borderColor='#C9A84C'; e.currentTarget.style.transform='scale(1.02)'; }}
+                    onMouseOut={e => { e.currentTarget.style.borderColor='rgba(201,168,76,0.3)'; e.currentTarget.style.transform='scale(1)'; }}
+                  />
+                ))}
+              </div>
+              <button onClick={() => toggleGallery('retail')} style={{backgroundColor:'#C9A84C', color:'#0a0f2e', border:'none', padding:'10px 24px', borderRadius:'6px', fontSize:'0.9rem', fontWeight:'600', cursor:'pointer', transition:'all 0.3s'}}>
+                {expandedGalleries.retail ? (isAr ? 'إخفاء المزيد' : 'Show Less') : (isAr ? 'عرض المزيد (1+)' : 'Show More (1+)')}
+              </button>
+            </div>
+          </div>
+
+          {/* ============ EXCEL PROJECT ============ */}
+          <div style={{marginBottom:'80px', backgroundColor:'#0d1540', borderRadius:'16px', padding:'40px', border:'2px solid rgba(201,168,76,0.4)'}}>
+            {/* Badge */}
+            <div style={{display:'inline-block', backgroundColor:'rgba(201,168,76,0.2)', color:'#C9A84C', padding:'6px 16px', borderRadius:'20px', fontSize:'0.75rem', fontWeight:'700', letterSpacing:'1px', marginBottom:'20px', border:'1px solid #C9A84C'}}>
+              {isAr ? '📊 مشروع Excel' : '📊 EXCEL PROJECT'}
+            </div>
+            
+            <h3 style={{color:'#ffe082', fontSize:'1.4rem', fontWeight:'700', marginBottom:'10px', lineHeight:'1.4'}}>
+              {isAr ? 'مجموعة أعمال متنوعة على Excel' : 'Excel Business Analysis Portfolio'}
+            </h3>
+
+            {/* Overview */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'10px', letterSpacing:'1px'}}>
+                {isAr ? '📋 نظرة عامة' : '📋 OVERVIEW'}
+              </h4>
+              <p style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8', marginBottom:'15px'}}>
+                {isAr
+                  ? 'مجموعة شاملة من مشاريع تحليل الأعمال التي تم إنجازها باستخدام Microsoft Excel، تغطي تحليل البيانات المتقدم والنماذج المالية والتقارير التشغيلية. تتضمن المشاريع استخدام الصيغ المتقدمة والجداول المحورية والرسوم البيانية التفاعلية والتحليل الإحصائي لدعم اتخاذ القرارات الاستراتيجية.'
+                  : 'A comprehensive collection of business analysis projects delivered using Microsoft Excel, covering advanced data analysis, financial modeling, and operational reporting. Projects include advanced formulas, pivot tables, interactive charts, and statistical analysis to support strategic decision-making.'}
+              </p>
+            </div>
+
+            {/* Key Features */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'10px', letterSpacing:'1px'}}>
+                {isAr ? '⚙️ المميزات والقدرات' : '⚙️ FEATURES & CAPABILITIES'}
+              </h4>
+              <ul style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8', marginBottom:'15px', paddingLeft:'20px'}}>
+                {isAr
+                  ? [
+                      'تحليل البيانات المتقدم والنماذج الإحصائية',
+                      'النماذج المالية والتنبؤات',
+                      'الجداول المحورية والتحليلات متعددة الأبعاد',
+                      'الرسوم البيانية التفاعلية والرؤى المرئية',
+                      'الصيغ المخصصة والدوال المعقدة',
+                      'التقارير الديناميكية والتجميعات'
+                    ].map((item, i) => <li key={i}>{item}</li>)
+                  : [
+                      'Advanced Data Analysis & Statistical Modeling',
+                      'Financial Modeling & Forecasting',
+                      'Pivot Tables & Multi-dimensional Analysis',
+                      'Interactive Charts & Visual Insights',
+                      'Custom Formulas & Complex Functions',
+                      'Dynamic Reporting & Aggregations'
+                    ].map((item, i) => <li key={i}>{item}</li>)
+                }
+              </ul>
+            </div>
+
+            {/* Business Impact */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'10px', letterSpacing:'1px'}}>
+                {isAr ? '💼 تأثير العمل' : '💼 BUSINESS IMPACT'}
+              </h4>
+              <p style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8'}}>
+                {isAr
+                  ? 'توفير أتمتة فعالة للتقارير، تسريع تحليل البيانات، تقليل الأخطاء اليدوية، والسماح بمقارنات سريعة للسيناريوهات المختلفة.'
+                  : 'Efficient reporting automation, accelerated data analysis, reduced manual errors, and enabled quick scenario comparisons for strategic planning.'}
+              </p>
+            </div>
+
+            {/* Tools & Technologies */}
+            <div style={{marginBottom:'30px'}}>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'10px', letterSpacing:'1px'}}>
+                {isAr ? '🛠️ الأدوات والتقنيات' : '🛠️ TOOLS & TECHNOLOGIES'}
+              </h4>
+              <p style={{color:'#aabbdd', fontSize:'0.9rem', lineHeight:'1.8'}}>
+                Microsoft Excel • Advanced Formulas • Pivot Tables • VBA Macros • Data Visualization • Statistical Analysis
+              </p>
+            </div>
+
+            {/* Image Gallery */}
+            <div>
+              <h4 style={{color:'#C9A84C', fontSize:'0.95rem', fontWeight:'600', marginBottom:'20px', letterSpacing:'1px'}}>
+                {isAr ? '📸 لقطات المشاريع' : '📸 PROJECT SCREENSHOTS'}
+              </h4>
+              <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(260px, 1fr))', gap:'15px', marginBottom:'20px'}}>
+                {[
+                  'Project (1).png',
+                  'Project (2).png',
+                  'Project (3).png',
+                  'Project (4).png',
+                  'Project (5).png',
+                  'Project (6).png',
+                  ...(expandedGalleries.excel ? [
+                    'Project (7).png',
+                    'Project (8).png',
+                    'Project (9).png',
+                    'Project (10).png',
+                    'Project (11).png',
+                    'Project (12).png',
+                    'Project (13).png',
+                    'Project (14).png',
+                    'Project (15).png',
+                    'Project (16).png',
+                    'Project (17).png',
+                    'Project (18).png'
+                  ] : [])
+                ].map((img, i) => (
+                  <img key={i} src={process.env.PUBLIC_URL + `/New project/${img}`} alt={`Excel Project ${i+1}`}
+                    loading="lazy" style={{width:'100%', borderRadius:'8px', border:'1px solid rgba(201,168,76,0.3)', cursor:'pointer', transition:'all 0.3s'}}
+                    onMouseOver={e => { e.currentTarget.style.borderColor='#C9A84C'; e.currentTarget.style.transform='scale(1.02)'; }}
+                    onMouseOut={e => { e.currentTarget.style.borderColor='rgba(201,168,76,0.3)'; e.currentTarget.style.transform='scale(1)'; }}
+                  />
+                ))}
+              </div>
+              <button onClick={() => toggleGallery('excel')} style={{backgroundColor:'#C9A84C', color:'#0a0f2e', border:'none', padding:'10px 24px', borderRadius:'6px', fontSize:'0.9rem', fontWeight:'600', cursor:'pointer', transition:'all 0.3s'}}>
+                {expandedGalleries.excel ? (isAr ? 'إخفاء المزيد' : 'Show Less') : (isAr ? 'عرض المزيد (12+)' : 'Show More (12+)')}
+              </button>
             </div>
           </div>
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { Sun, Moon, Zap, TrendingUp, Users, GraduationCap, LineChart, Play, Pause, MapPin, Phone, Mail, Languages as Languages2, Globe2, Cpu, Target, BarChart3 } from 'lucide-react';
+import { Sun, Moon, Zap, TrendingUp, Users, GraduationCap, LineChart, Play, Pause, MapPin, Phone, Mail, Languages as Languages2, Globe2, Cpu, Target, BarChart3, Menu, X } from 'lucide-react';
 import './App.css';
 
 class ErrorBoundary extends React.Component {
@@ -31,6 +31,14 @@ function AppContent() {
   const [lang, setLang] = useState('en');
   const [expandedGalleries, setExpandedGalleries] = useState({});
   const [activeBookVideo, setActiveBookVideo] = useState(null);
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 860 : false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [heroVideoLoaded, setHeroVideoLoaded] = useState(false);
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth <= 860);
+    window.addEventListener('resize', onResize, { passive: true });
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
   const isAr = lang === 'ar';
   const audioRef = useRef(null);
   const heroRef = useRef(null);
@@ -372,8 +380,8 @@ function AppContent() {
 
     {
       id: 'mirnex',
-      cover: '/books/cover-mirnex-analytics.png',
-      infographicAr: '/books/infographic-mirnex-analytics-ar.png',
+      cover: '/books/cover-mirnex-analytics.jpg',
+      infographicAr: '/books/infographic-mirnex-analytics-ar.jpg',
       titleEn: 'Mirnex Analytics — Power BI & DAX Master Library',
       titleAr: 'مكتبة ميرنكس أناليتكس — المرجع الشامل لـ Power BI وDAX',
       descEn: "A production-grade reference for mastering Microsoft Power BI and DAX — built around the 80/20 rule: 80% of performance issues and inaccurate KPIs come from poor data modeling, not complex formulas. Covers Star Schema architecture, 500+ ready DAX formulas, a 180+ KPI dictionary, and disciplined dashboard design across 21 chapters.",
@@ -384,8 +392,8 @@ function AppContent() {
     },
     {
       id: 'datamodeling',
-      cover: '/books/cover-data-modeling.png',
-      infographicAr: '/books/infographic-data-modeling-ar.png',
+      cover: '/books/cover-data-modeling.jpg',
+      infographicAr: '/books/infographic-data-modeling-ar.jpg',
       titleEn: 'Data Modeling Mastery: Enterprise Architecture for Power BI & AI Systems',
       titleAr: 'احتراف نمذجة البيانات: هندسة المؤسسات لـ Power BI وأنظمة الذكاء الاصطناعي',
       descEn: "A practical guide to understanding, designing, and applying data models that drive real business results. Explains why a well-designed semantic model — not visualization or DAX complexity — is the true foundation of reliable Business Intelligence and AI systems, with real-world examples across multiple industries.",
@@ -650,25 +658,50 @@ function AppContent() {
       <>
       {/* NAVBAR */}
       <nav className="site-nav">
-        <div style={{maxWidth:'1200px', margin:'0 auto', padding:'14px 32px', display:'flex', justifyContent:'space-between', alignItems:'center', flexWrap:'wrap', gap:'12px'}}>
-          <img src={process.env.PUBLIC_URL + "/images/logo.png"} alt="HK Logo" style={{height:'44px', width:'auto'}}/>
-          <div style={{display:'flex', gap:'22px', alignItems:'center', flexWrap:'wrap'}}>
-            {navLinks.map((item, idx) => (
-              <a key={item} href={`#${navAnchors[idx]}`} style={{fontSize:'14px', letterSpacing: isAr ? '0' : '.03em'}}>
-                {item}
-              </a>
-            ))}
-          </div>
-          <div style={{display:'flex', gap:'10px', alignItems:'center'}}>
+        <div style={{maxWidth:'1200px', margin:'0 auto', padding:'14px 20px', display:'flex', justifyContent:'space-between', alignItems:'center', gap:'12px'}}>
+          <img src={process.env.PUBLIC_URL + "/images/logo.png"} alt="HK Logo" style={{height:'40px', width:'auto', flexShrink:0}}/>
+
+          {!isMobile && (
+            <div style={{display:'flex', gap:'20px', alignItems:'center', flexWrap:'wrap', justifyContent:'center', flex:1}}>
+              {navLinks.map((item, idx) => (
+                <a key={item} href={`#${navAnchors[idx]}`} style={{fontSize:'13px', letterSpacing: isAr ? '0' : '.03em', whiteSpace:'nowrap'}}>
+                  {item}
+                </a>
+              ))}
+            </div>
+          )}
+
+          <div style={{display:'flex', gap:'10px', alignItems:'center', flexShrink:0}}>
             <button onClick={toggleTheme} className="theme-toggle" aria-label="toggle theme" title={theme==='dark' ? 'Light mode' : 'Dark mode'}>
               {theme === 'dark' ? <Sun size={16}/> : <Moon size={16}/>}
             </button>
-            <button onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} className="pill-btn" style={{padding:'6px 15px', fontSize:'13px'}}>
-              {lang === 'en' ? 'AR عربية' : 'EN English'}
-            </button>
+            {!isMobile && (
+              <button onClick={() => setLang(lang === 'en' ? 'ar' : 'en')} className="pill-btn" style={{padding:'6px 15px', fontSize:'13px'}}>
+                {lang === 'en' ? 'AR عربية' : 'EN English'}
+              </button>
+            )}
+            {isMobile && (
+              <button onClick={() => setMobileMenuOpen(o => !o)} className="theme-toggle" aria-label="menu">
+                {mobileMenuOpen ? <X size={18}/> : <Menu size={18}/>}
+              </button>
+            )}
           </div>
         </div>
         <div id="scrollProgress" style={{width:`${scrollPct}%`}}/>
+
+        {isMobile && mobileMenuOpen && (
+          <div className="glass-card" style={{margin:'0 12px 12px', borderRadius:'14px', padding:'16px', display:'flex', flexDirection:'column', gap:'4px'}}>
+            {navLinks.map((item, idx) => (
+              <a key={item} href={`#${navAnchors[idx]}`} onClick={() => setMobileMenuOpen(false)}
+                style={{fontSize:'14px', padding:'10px 8px', borderBottom:'1px solid var(--border)'}}>
+                {item}
+              </a>
+            ))}
+            <button onClick={() => { setLang(lang === 'en' ? 'ar' : 'en'); setMobileMenuOpen(false); }} className="pill-btn" style={{padding:'10px', fontSize:'13px', marginTop:'8px'}}>
+              {lang === 'en' ? 'AR عربية' : 'EN English'}
+            </button>
+          </div>
+        )}
       </nav>
 
       {/* HERO */}
@@ -734,14 +767,27 @@ function AppContent() {
             {isAr ? '🎬 شاهد مقدمتي' : '🎬 WATCH MY INTRO'}
           </p>
           <div className="glass-card" style={{position:'relative', paddingBottom:'56.25%', height:0, borderRadius:'16px', overflow:'hidden'}}>
-            <iframe
-              src={isAr ? "https://www.youtube.com/embed/yOkay2ybqGM" : "https://www.youtube.com/embed/ri5AcGWM8iY"}
-              title="Hatem Kandeel Intro"
-              style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
+            {heroVideoLoaded ? (
+              <iframe
+                src={`${isAr ? "https://www.youtube.com/embed/yOkay2ybqGM" : "https://www.youtube.com/embed/ri5AcGWM8iY"}?autoplay=1`}
+                title="Hatem Kandeel Intro"
+                style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <button onClick={() => setHeroVideoLoaded(true)} aria-label="Play intro video"
+                style={{position:'absolute', inset:0, width:'100%', height:'100%', border:'none', cursor:'pointer', padding:0}}>
+                <img src={`https://img.youtube.com/vi/${isAr ? 'yOkay2ybqGM' : 'ri5AcGWM8iY'}/hqdefault.jpg`} alt="Video preview"
+                  loading="lazy" style={{width:'100%', height:'100%', objectFit:'cover'}}/>
+                <div style={{position:'absolute', inset:0, background:'rgba(0,0,0,0.35)', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                  <div style={{width:'70px', height:'70px', borderRadius:'50%', background:'var(--gold)', display:'flex', alignItems:'center', justifyContent:'center', boxShadow:'0 0 30px rgba(197,168,128,.6)'}}>
+                    <Play size={28} color="var(--bg)" fill="var(--bg)" style={{marginLeft:'4px'}}/>
+                  </div>
+                </div>
+              </button>
+            )}
           </div>
         </div>
       </motion.section>
@@ -935,7 +981,7 @@ function AppContent() {
 
           {/* Ready-made Career Infographic */}
           <div style={{marginTop:'50px'}}>
-            <img src={process.env.PUBLIC_URL + (isAr ? "/images/growth-story-ar.png" : "/images/growth-story-en.png")}
+            <img src={process.env.PUBLIC_URL + (isAr ? "/images/growth-story-ar.jpg" : "/images/growth-story-en.jpg")}
               alt={isAr ? "مسيرة نجاح حاتم قنديل المهنية" : "Hatem Kandeel: 20 Years of Strategic Growth"}
               loading="lazy" style={{width:'100%', borderRadius:'14px', border:'1px solid var(--border)'}}/>
           </div>
@@ -1609,7 +1655,7 @@ function AppContent() {
 
         <div style={{display:'grid', gap:'30px'}}>
           {platformsData.map((p) => (
-            <div key={p.id} className="glass-card" style={{borderRadius:'20px', padding:'34px', display:'grid', gridTemplateColumns:'minmax(260px, 380px) 1fr', gap:'34px'}}>
+            <div key={p.id} className="glass-card" style={{borderRadius:'20px', padding: isMobile ? '20px' : '34px', display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'minmax(260px, 380px) 1fr', gap: isMobile ? '18px' : '34px'}}>
               <div style={{display:'grid', gridTemplateColumns: p.images.length > 1 ? 'repeat(2, 1fr)' : '1fr', gap:'8px', alignContent:'start'}}>
                 {p.images.map((img, idx) => (
                   <img key={idx} src={process.env.PUBLIC_URL + img} alt={isAr ? p.titleAr : p.titleEn} loading="lazy"
@@ -1654,7 +1700,7 @@ function AppContent() {
         </h2>
 
         {booksData.map((book, i) => (
-          <div key={book.id} className="glass-card" style={{borderRadius:'20px', padding:'40px', marginBottom:'40px', display:'grid', gridTemplateColumns:'minmax(220px, 280px) 1fr', gap:'40px'}}>
+          <div key={book.id} className="glass-card" style={{borderRadius:'20px', padding: isMobile ? '22px' : '40px', marginBottom:'40px', display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'minmax(220px, 280px) 1fr', gap: isMobile ? '20px' : '40px'}}>
             <div>
               <img src={process.env.PUBLIC_URL + book.cover} alt={isAr ? book.titleAr : book.titleEn}
                 loading="lazy" style={{width:'100%', borderRadius:'10px', boxShadow:'0 10px 30px var(--shadow-color)'}}/>
@@ -1792,7 +1838,7 @@ function AppContent() {
               <h3 className="font-serif-ui" style={{color:'var(--text)', fontSize:'1.2rem', fontWeight:700, marginBottom:'22px'}}>
                 {isAr ? 'أرسل رسالة' : 'Send a Message'}
               </h3>
-              <div style={{display:'grid', gridTemplateColumns:'1fr 1fr', gap:'16px', marginBottom:'16px'}}>
+              <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap:'16px', marginBottom:'16px'}}>
                 <div>
                   <label style={{display:'block', color:'var(--text-muted)', fontSize:'12px', marginBottom:'6px'}}>{isAr ? 'اسمك' : 'Your Name'}</label>
                   <input required value={contactForm.name} onChange={e => setContactForm({...contactForm, name:e.target.value})}

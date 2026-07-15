@@ -1929,7 +1929,7 @@ function AppContent() {
             <p style={{color:'var(--gold)', letterSpacing:'3px', fontSize:'12px', marginBottom:'15px', textAlign:'center'}}>
               {isAr ? '🃏 بطاقة أعمال رقمية' : '🃏 DIGITAL BUSINESS CARD'}
             </p>
-            <img src={process.env.PUBLIC_URL + "/projects/businesscard.jpg"} alt="Hatem Kandeel Business Card"
+            <img src={process.env.PUBLIC_URL + "/projects/Businesscard.jpg"} alt="Hatem Kandeel Business Card"
               loading="lazy" style={{width:'100%', borderRadius:'12px', border:'1px solid rgba(197,168,128,0.3)'}}/>
           </div>
         </div>

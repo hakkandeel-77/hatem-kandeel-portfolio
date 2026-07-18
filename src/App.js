@@ -1,8 +1,116 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
-import { Sun, Moon, Zap, TrendingUp, Users, GraduationCap, LineChart, Play, Pause, MapPin, Phone, Mail, Languages as Languages2, Globe2, Cpu, Target, BarChart3, Menu, X } from 'lucide-react';
+import { Sun, Moon, Zap, TrendingUp, Users, GraduationCap, LineChart, Play, Pause, MapPin, Phone, Mail, Languages as Languages2, Globe2, Cpu, Target, BarChart3, Menu, X, Plane, MapPinned } from 'lucide-react';
 import './App.css';
+
+function SectionDivider({ variant = 'flow', Icon }) {
+  if (variant === 'diamonds') {
+    return (
+      <div className="divider-wrap">
+        <div className="divider-diamonds">
+          <span className="divider-diamond"/><span className="divider-diamond"/><span className="divider-diamond"/>
+        </div>
+      </div>
+    );
+  }
+  if (variant === 'badge') {
+    return (
+      <div className="divider-wrap" style={{gap:'16px'}}>
+        <div className="divider-flow-track" style={{maxWidth:'160px'}}><span className="divider-flow-spark"/></div>
+        <div className="divider-badge-ring">{Icon ? <Icon size={16} color="var(--gold)"/> : null}</div>
+        <div className="divider-flow-track" style={{maxWidth:'160px'}}><span className="divider-flow-spark" style={{animationDelay:'2.2s'}}/></div>
+      </div>
+    );
+  }
+  return (
+    <div className="divider-wrap">
+      <div className="divider-flow-track"><span className="divider-flow-spark"/></div>
+    </div>
+  );
+}
+
+function MindMapVisual({ isAr }) {
+  const branches = [
+    { y: 70, color: 'var(--violet)', label: isAr ? 'البيانات وذكاء الأعمال والذكاء الاصطناعي' : 'Data, BI & AI',
+      subs: [isAr ? 'Power BI وDAX' : 'Power BI & DAX', isAr ? 'هندسة أوامر الذكاء الاصطناعي' : 'AI Prompt Engineering', isAr ? 'Excel المتقدم والتحليل' : 'Advanced Excel & Analytics'] },
+    { y: 210, color: 'var(--gold)', label: isAr ? 'تطوير الأعمال التجارية' : 'Business Development',
+      subs: [isAr ? 'نمو مبيعات B2B' : 'B2B Sales Growth', isAr ? 'إدارة العملاء الرئيسيين' : 'Key Account Management', isAr ? 'نمو إيرادات 200%' : '200% Revenue Growth'] },
+    { y: 350, color: 'var(--gold-bright)', label: isAr ? 'العمليات والقيادة' : 'Operations & Leadership',
+      subs: [isAr ? 'قيادة فرق (+50)' : 'Team Leadership (50+)', isAr ? 'إدارة المشاريع' : 'Project Management', isAr ? 'المشتريات وعلاقات الموردين' : 'Procurement & Vendor Relations'] },
+    { y: 490, color: 'var(--violet)', label: isAr ? 'التنمية الدولية' : 'International Development',
+      subs: [isAr ? 'البنك الدولي وإيفاد' : 'World Bank & IFAD', isAr ? 'حوكمة أصحاب المصلحة' : 'Stakeholder Governance', isAr ? 'تنمية المجتمع' : 'Community Development'] },
+  ];
+  const cx = 108, cy = 280, bx = 400, sx = isAr ? 640 : 700;
+
+  return (
+    <svg viewBox="0 0 1000 560" style={{width:'100%', height:'auto', direction:'ltr'}}>
+      <defs>
+        <filter id="mm-glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="4" result="blur"/>
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      {branches.map((b, i) => (
+        <g key={i}>
+          <path d={`M ${cx} ${cy} C ${cx+140} ${cy}, ${bx-120} ${b.y}, ${bx} ${b.y}`}
+            stroke={b.color} strokeWidth="1.4" fill="none" opacity="0.55"/>
+          {b.subs.map((s, j) => {
+            const suby = b.y + (j - 1) * 46;
+            return <path key={j} d={`M ${bx} ${b.y} C ${bx+70} ${b.y}, ${sx-70} ${suby}, ${sx} ${suby}`}
+              stroke={b.color} strokeWidth="1" fill="none" opacity="0.35"/>;
+          })}
+        </g>
+      ))}
+
+      {/* center hub */}
+      <circle cx={cx} cy={cy} r="52" fill="var(--bg-elevated)" stroke="var(--gold)" strokeWidth="1.5" filter="url(#mm-glow)" className="mm-pulse"/>
+      <circle cx={cx} cy={cy} r="52" fill="none" stroke="var(--gold)" strokeWidth="1" opacity="0.4" className="mm-ring"/>
+      <text x={cx} y={cy - 6} textAnchor="middle" fill="var(--gold-bright)" fontSize="13" fontWeight="700" fontFamily="Cinzel, serif">Hatem</text>
+      <text x={cx} y={cy + 12} textAnchor="middle" fill="var(--text-muted)" fontSize="9">Kandeel</text>
+
+      {branches.map((b, i) => (
+        <g key={i}>
+          <circle cx={bx} cy={b.y} r="7" fill={b.color} filter="url(#mm-glow)"/>
+          <text x={bx + (isAr ? -14 : 14)} y={b.y + 4} textAnchor={isAr ? 'end' : 'start'} fill="var(--text)" fontSize="13" fontWeight="700">{b.label}</text>
+          {b.subs.map((s, j) => {
+            const suby = b.y + (j - 1) * 46;
+            return (
+              <g key={j}>
+                <circle cx={sx} cy={suby} r="3.5" fill={b.color} opacity="0.9"/>
+                <text x={sx + (isAr ? -10 : 10)} y={suby + 3.5} textAnchor={isAr ? 'end' : 'start'} fill="var(--text-muted)" fontSize="10.5">{s}</text>
+              </g>
+            );
+          })}
+        </g>
+      ))}
+    </svg>
+  );
+}
+
+function DataCubeAccent({ size = 90 }) {
+  return (
+    <svg viewBox="0 0 100 100" style={{width: size, height: size, flexShrink:0}}>
+      <defs>
+        <filter id="dc-glow" x="-80%" y="-80%" width="260%" height="260%">
+          <feGaussianBlur stdDeviation="2.2" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+      {/* isometric cube */}
+      <polygon points="50,10 85,28 85,64 50,82 15,64 15,28" fill="none" stroke="var(--border-strong)" strokeWidth="1"/>
+      <polygon points="50,10 85,28 50,46 15,28" fill="color-mix(in srgb, var(--gold) 18%, transparent)" stroke="var(--gold)" strokeWidth="1.2" className="dc-face dc-face-1"/>
+      <polygon points="50,46 85,28 85,64 50,82" fill="color-mix(in srgb, var(--violet) 16%, transparent)" stroke="var(--violet)" strokeWidth="1.2" className="dc-face dc-face-2"/>
+      <polygon points="50,46 15,28 15,64 50,82" fill="color-mix(in srgb, var(--gold) 10%, transparent)" stroke="var(--gold-bright)" strokeWidth="1" opacity="0.8"/>
+      {/* orbiting nodes */}
+      <circle cx="50" cy="46" r="3" fill="var(--gold)" filter="url(#dc-glow)" className="dc-core"/>
+      <circle cx="15" cy="28" r="2" fill="var(--violet)" className="dc-node" style={{animationDelay:'0s'}}/>
+      <circle cx="85" cy="64" r="2" fill="var(--gold)" className="dc-node" style={{animationDelay:'.6s'}}/>
+      <circle cx="50" cy="10" r="2" fill="var(--violet)" className="dc-node" style={{animationDelay:'1.2s'}}/>
+    </svg>
+  );
+}
 
 class ErrorBoundary extends React.Component {
   constructor(props) { super(props); this.state = { hasError: false }; }
@@ -103,8 +211,16 @@ function AppContent() {
     setLang(chosenLang);
     setShowGate(false);
     setSiteEntered(true);
+    setShowCurtain(true);
     try { sessionStorage.setItem('hk-entered', '1'); } catch {}
   };
+  const [showCurtain, setShowCurtain] = useState(false);
+  useEffect(() => {
+    if (siteEntered) {
+      const t = setTimeout(() => setShowCurtain(false), 1100);
+      return () => clearTimeout(t);
+    }
+  }, [siteEntered]);
 
   // Scroll progress bar
   const [scrollPct, setScrollPct] = useState(0);
@@ -382,6 +498,7 @@ function AppContent() {
       id: 'mirnex',
       cover: '/books/cover-mirnex-analytics.jpg',
       infographicAr: '/books/infographic-mirnex-analytics-ar.jpg',
+      infographicEn: '/books/infographic-mirnex-analytics-en.jpg',
       titleEn: 'Mirnex Analytics — Power BI & DAX Master Library',
       titleAr: 'مكتبة ميرنكس أناليتكس — المرجع الشامل لـ Power BI وDAX',
       descEn: "A production-grade reference for mastering Microsoft Power BI and DAX — built around the 80/20 rule: 80% of performance issues and inaccurate KPIs come from poor data modeling, not complex formulas. Covers Star Schema architecture, 500+ ready DAX formulas, a 180+ KPI dictionary, and disciplined dashboard design across 21 chapters.",
@@ -394,6 +511,7 @@ function AppContent() {
       id: 'datamodeling',
       cover: '/books/cover-data-modeling.jpg',
       infographicAr: '/books/infographic-data-modeling-ar.jpg',
+      infographicEn: '/books/infographic-data-modeling-en.jpg',
       titleEn: 'Data Modeling Mastery: Enterprise Architecture for Power BI & AI Systems',
       titleAr: 'احتراف نمذجة البيانات: هندسة المؤسسات لـ Power BI وأنظمة الذكاء الاصطناعي',
       descEn: "A practical guide to understanding, designing, and applying data models that drive real business results. Explains why a well-designed semantic model — not visualization or DAX complexity — is the true foundation of reliable Business Intelligence and AI systems, with real-world examples across multiple industries.",
@@ -612,7 +730,7 @@ function AppContent() {
 
   return (
     <div className={`app-shell ${isAr ? 'lang-ar' : 'lang-en'}`} data-theme={theme}
-      style={{direction: isAr ? 'rtl' : 'ltr', textAlign: isAr ? 'right' : 'left'}}>
+      style={{direction: isAr ? 'rtl' : 'ltr', textAlign: isAr ? 'right' : 'left', position:'relative'}}>
 
       {/* PRELOADER */}
       {showPreloader && (
@@ -626,6 +744,23 @@ function AppContent() {
       {/* LANGUAGE GATE */}
       {showGate && !showPreloader && (
         <div className="gate">
+          {/* Corner ornaments */}
+          <svg className="gate-corner gate-corner-tl" viewBox="0 0 120 120" fill="none"><path d="M6 6 L6 44 M6 6 L44 6" stroke="url(#gcg1)" strokeWidth="1.5"/><circle cx="6" cy="6" r="3" fill="url(#gcg1)"/><path d="M20 6 Q40 6 40 26" stroke="url(#gcg1)" strokeWidth="1" opacity="0.6"/><path d="M6 20 Q6 40 26 40" stroke="url(#gcg1)" strokeWidth="1" opacity="0.6"/><defs><linearGradient id="gcg1" x1="0" y1="0" x2="1" y2="1"><stop stopColor="var(--gold)"/><stop offset="1" stopColor="var(--gold-bright)"/></linearGradient></defs></svg>
+          <svg className="gate-corner gate-corner-tr" viewBox="0 0 120 120" fill="none"><path d="M114 6 L114 44 M114 6 L76 6" stroke="url(#gcg2)" strokeWidth="1.5"/><circle cx="114" cy="6" r="3" fill="url(#gcg2)"/><path d="M100 6 Q80 6 80 26" stroke="url(#gcg2)" strokeWidth="1" opacity="0.6"/><path d="M114 20 Q114 40 94 40" stroke="url(#gcg2)" strokeWidth="1" opacity="0.6"/><defs><linearGradient id="gcg2" x1="1" y1="0" x2="0" y2="1"><stop stopColor="var(--gold)"/><stop offset="1" stopColor="var(--gold-bright)"/></linearGradient></defs></svg>
+          <svg className="gate-corner gate-corner-bl" viewBox="0 0 120 120" fill="none"><path d="M6 114 L6 76 M6 114 L44 114" stroke="url(#gcg3)" strokeWidth="1.5"/><circle cx="6" cy="114" r="3" fill="url(#gcg3)"/><path d="M20 114 Q40 114 40 94" stroke="url(#gcg3)" strokeWidth="1" opacity="0.6"/><path d="M6 100 Q6 80 26 80" stroke="url(#gcg3)" strokeWidth="1" opacity="0.6"/><defs><linearGradient id="gcg3" x1="0" y1="1" x2="1" y2="0"><stop stopColor="var(--gold)"/><stop offset="1" stopColor="var(--gold-bright)"/></linearGradient></defs></svg>
+          <svg className="gate-corner gate-corner-br" viewBox="0 0 120 120" fill="none"><path d="M114 114 L114 76 M114 114 L76 114" stroke="url(#gcg4)" strokeWidth="1.5"/><circle cx="114" cy="114" r="3" fill="url(#gcg4)"/><path d="M100 114 Q80 114 80 94" stroke="url(#gcg4)" strokeWidth="1" opacity="0.6"/><path d="M114 100 Q114 80 94 80" stroke="url(#gcg4)" strokeWidth="1" opacity="0.6"/><defs><linearGradient id="gcg4" x1="1" y1="1" x2="0" y2="0"><stop stopColor="var(--gold)"/><stop offset="1" stopColor="var(--gold-bright)"/></linearGradient></defs></svg>
+
+          {/* Subtle rotating mandala pattern in the background */}
+          <svg className="gate-mandala" viewBox="0 0 400 400" fill="none">
+            <g stroke="var(--gold)" strokeWidth="0.6">
+              {[...Array(12)].map((_, i) => (
+                <ellipse key={i} cx="200" cy="200" rx="150" ry="60" transform={`rotate(${i * 15} 200 200)`}/>
+              ))}
+              <circle cx="200" cy="200" r="90" opacity="0.5"/>
+              <circle cx="200" cy="200" r="150" opacity="0.3"/>
+            </g>
+          </svg>
+
           <div className="gate-ring">
             <img src={process.env.PUBLIC_URL + "/images/profile.jpg"} alt="Hatem Kandeel"
               onError={(e) => { e.target.style.display = 'none'; }}/>
@@ -656,10 +791,36 @@ function AppContent() {
 
       {siteEntered && (
       <>
+      {showCurtain && (
+        <div style={{position:'fixed', inset:0, zIndex:4000, pointerEvents:'none', display:'flex'}}>
+          <motion.div initial={{x:0}} animate={{x:'-100%'}} transition={{duration:.9, delay:.15, ease:[0.76,0,0.24,1]}}
+            style={{width:'50%', height:'100%', background:'var(--bg)'}}/>
+          <motion.div initial={{x:0}} animate={{x:'100%'}} transition={{duration:.9, delay:.15, ease:[0.76,0,0.24,1]}}
+            style={{width:'50%', height:'100%', background:'var(--bg)'}}/>
+          <motion.div initial={{opacity:0, scaleY:0}} animate={{opacity:[0,1,0], scaleY:[0,1,1]}} transition={{duration:1, delay:.05, times:[0,0.3,1]}}
+            style={{position:'absolute', top:0, left:'50%', width:'3px', height:'100%', transform:'translateX(-50%)',
+              background:'linear-gradient(var(--gold-bright), var(--gold), var(--gold-bright))',
+              boxShadow:'0 0 40px 6px color-mix(in srgb, var(--gold) 70%, transparent)'}}/>
+        </div>
+      )}
+
+      {/* FLIGHT PATH — the journey rail */}
+      <div className="flight-rail side-right" aria-hidden="true">
+        <div className="flight-rail-line"/>
+        <div className="flight-marker-top"><Plane size={15} style={{transform:'rotate(90deg)'}}/></div>
+        {[10,20,30,40,50,60,70,80,90].map((pct) => (
+          <div key={pct} className={`flight-waypoint ${scrollPct >= pct - 3 ? 'reached' : ''}`} style={{top:`${pct}%`}}/>
+        ))}
+        <div className="flight-marker-bottom"><MapPinned size={15} color="var(--gold)"/></div>
+        <div className="flight-rail-plane" style={{top:`${Math.min(97, Math.max(3, scrollPct))}%`}}>
+          <Plane size={14} color="var(--gold)" style={{transform:'rotate(90deg)'}}/>
+        </div>
+      </div>
+
       {/* NAVBAR */}
       <nav className="site-nav">
         <div style={{maxWidth:'1200px', margin:'0 auto', padding:'14px 20px', display:'flex', justifyContent:'space-between', alignItems:'center', gap:'12px'}}>
-          <img src={process.env.PUBLIC_URL + "/images/logo.png"} alt="HK Logo" style={{height:'40px', width:'auto', flexShrink:0}}/>
+          <img src={process.env.PUBLIC_URL + (theme === 'dark' ? "/images/mirnex-logo-dark.png" : "/images/mirnex-logo-light.png")} alt="Mirnex Logo" style={{height:'40px', width:'auto', flexShrink:0}}/>
 
           {!isMobile && (
             <div style={{display:'flex', gap:'20px', alignItems:'center', flexWrap:'wrap', justifyContent:'center', flex:1}}>
@@ -710,30 +871,114 @@ function AppContent() {
           backgroundImage:'linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px)',
           backgroundSize:'56px 56px', maskImage:'linear-gradient(to bottom,black,transparent 75%)', WebkitMaskImage:'linear-gradient(to bottom,black,transparent 75%)'}}/>
 
-        <div className="glass-card" style={{display:'inline-flex', alignItems:'center', gap:'8px', padding:'8px 18px', borderRadius:'999px', marginBottom:'28px'}}>
+        <div className="hero-particles">
+          {[...Array(16)].map((_, i) => (
+            <span key={i} className="hero-particle" style={{left:`${(i * 6.3) % 100}%`, animationDuration:`${9 + (i % 5) * 2.4}s`, animationDelay:`${(i * 0.7) % 8}s`}}/>
+          ))}
+        </div>
+        <div className="hero-scanline"/>
+        <div className="hero-cloud" style={{width:'220px', height:'70px', top:'14%', left:'8%', animationDuration:'22s'}}/>
+        <div className="hero-cloud" style={{width:'160px', height:'55px', top:'26%', right:'12%', animationDuration:'26s', animationDelay:'3s'}}/>
+        <div className="hero-cloud" style={{width:'190px', height:'60px', top:'8%', right:'30%', animationDuration:'19s', animationDelay:'6s'}}/>
+
+        {/* Twinkling stars */}
+        {[...Array(24)].map((_, i) => {
+          const size = 1.5 + (i % 3);
+          return <span key={i} className="hero-star" style={{
+            width:`${size}px`, height:`${size}px`,
+            top:`${(i * 17.3) % 85}%`, left:`${(i * 23.7) % 96}%`,
+            animationDuration:`${2.2 + (i % 5) * .6}s`, animationDelay:`${(i * .4) % 4}s`
+          }}/>;
+        })}
+
+        {/* Circuit-line network accent */}
+        <svg className="hero-circuit" viewBox="0 0 1200 700" preserveAspectRatio="none">
+          <g stroke="var(--gold)" strokeWidth="1" fill="none" opacity="0.7">
+            <path d="M0,120 L140,120 L180,160 L340,160"/>
+            <path d="M1200,560 L1040,560 L1000,520 L860,520"/>
+            <path d="M60,700 L60,580 L120,520 L120,420"/>
+          </g>
+          <g fill="var(--gold)">
+            <circle className="hero-circuit-node" cx="180" cy="160" r="3"/>
+            <circle className="hero-circuit-node" cx="340" cy="160" r="2.4" style={{animationDelay:'.8s'}}/>
+            <circle className="hero-circuit-node" cx="1000" cy="520" r="3" style={{animationDelay:'1.4s'}}/>
+            <circle className="hero-circuit-node" cx="120" cy="420" r="2.4" style={{animationDelay:'2s'}}/>
+          </g>
+        </svg>
+
+        {/* Glowing ascending bar chart accent — right side */}
+        <svg className="hero-bars hero-bars-right" viewBox="0 0 220 140" style={{width:'230px', height:'auto', right:'6%', top:'24%', display: isMobile ? 'none' : 'block'}}>
+          <defs>
+            <linearGradient id="hb-grad" x1="0" y1="1" x2="0" y2="0">
+              <stop offset="0%" stopColor="var(--violet)"/>
+              <stop offset="100%" stopColor="var(--gold)"/>
+            </linearGradient>
+          </defs>
+          <g fill="url(#hb-grad)">
+            <rect x="10" y="105" width="18" height="30"/>
+            <rect x="38" y="90" width="18" height="45"/>
+            <rect x="66" y="100" width="18" height="35"/>
+            <rect x="94" y="70" width="18" height="65"/>
+            <rect x="122" y="50" width="18" height="85"/>
+            <rect x="150" y="20" width="18" height="115"/>
+          </g>
+          <path d="M19,105 L47,90 L75,100 L103,70 L131,50 L159,20" stroke="var(--gold-bright)" strokeWidth="2" fill="none"/>
+          <circle className="hero-bars-glow-dot" cx="159" cy="20" r="5" fill="var(--gold-bright)"/>
+        </svg>
+
+        {/* Glowing radial analytics ring accent — left side (symmetry) */}
+        <svg className="hero-bars hero-bars-left" viewBox="0 0 140 140" style={{width:'190px', height:'auto', left:'6%', top:'24%', display: isMobile ? 'none' : 'block'}}>
+          <defs>
+            <linearGradient id="hr-grad" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stopColor="var(--gold)"/>
+              <stop offset="100%" stopColor="var(--violet)"/>
+            </linearGradient>
+          </defs>
+          <circle cx="70" cy="70" r="52" fill="none" stroke="var(--border-strong)" strokeWidth="10" opacity="0.4"/>
+          <circle cx="70" cy="70" r="52" fill="none" stroke="url(#hr-grad)" strokeWidth="10" strokeDasharray="240 327" strokeLinecap="round" transform="rotate(-90 70 70)"/>
+          <circle cx="70" cy="18" r="6" className="hero-bars-glow-dot" fill="var(--gold-bright)"/>
+          <text x="70" y="66" textAnchor="middle" fill="var(--gold-bright)" fontSize="22" fontWeight="700" fontFamily="Cinzel, serif">73%</text>
+          <text x="70" y="84" textAnchor="middle" fill="var(--text-dim)" fontSize="8">GROWTH</text>
+        </svg>
+
+        <svg className="hero-skyline" viewBox="0 0 1200 160" preserveAspectRatio="none">
+          <g fill="var(--gold)">
+            <rect x="20" y="70" width="40" height="90"/>
+            <rect x="70" y="40" width="34" height="120"/>
+            <rect x="115" y="90" width="30" height="70"/>
+            <rect x="1060" y="60" width="36" height="100"/>
+            <rect x="1105" y="30" width="30" height="130"/>
+            <rect x="1145" y="80" width="34" height="80"/>
+            <polygon points="87,40 87,10 104,40"/>
+            <polygon points="1120,30 1120,5 1136,30"/>
+          </g>
+        </svg>
+
+        <motion.div initial={{opacity:0, y:14}} animate={{opacity:1, y:0}} transition={{duration:.6, delay:0}} className="glass-card" style={{display:'inline-flex', alignItems:'center', gap:'8px', padding:'8px 18px', borderRadius:'999px', marginBottom:'28px'}}>
           <Zap size={13} color="var(--violet)"/>
           <span style={{fontSize:'11px', letterSpacing:'.15em', textTransform:'uppercase', color:'var(--violet)', fontWeight:700}}>
             {isAr ? 'المحفظة التنفيذية' : "Executive Portfolio"}
           </span>
-        </div>
+        </motion.div>
 
-        <div style={{position:'relative', width:'170px', height:'170px', marginBottom:'26px'}}>
+        <motion.div initial={{opacity:0, scale:.85}} animate={{opacity:1, scale:1}} transition={{duration:.7, delay:.15}} style={{position:'relative', width:'170px', height:'170px', marginBottom:'26px'}}>
+          <div className="hero-spotlight"/>
           <div className="orbit-ring orbit-ring-1"/>
           <div className="orbit-ring orbit-ring-2"/>
           <div style={{position:'absolute', top:'10px', left:'10px', width:'150px', height:'150px', borderRadius:'50%', border:'3px solid var(--gold)', overflow:'hidden', boxShadow:'0 0 40px rgba(197,168,128,0.35)'}}>
             <motion.img src={process.env.PUBLIC_URL + "/images/profile.jpg"} alt="Hatem Kandeel" style={{width:'100%', height:'100%', objectFit:'cover', filter: heroImgFilter}}/>
           </div>
-        </div>
+        </motion.div>
 
-        <h1 className="font-serif-ui" style={{fontSize:'clamp(2.4rem,6vw,3.7rem)', fontWeight:700, marginBottom:'12px', background:'linear-gradient(135deg, var(--gold-bright), var(--gold))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>
+        <motion.h1 initial={{opacity:0, y:16}} animate={{opacity:1, y:0}} transition={{duration:.6, delay:.3}} className="font-serif-ui" style={{fontSize:'clamp(2.4rem,6vw,3.7rem)', fontWeight:700, marginBottom:'12px', background:'linear-gradient(135deg, var(--gold-bright), var(--gold))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>
           {isAr ? 'حاتم قنديل' : 'Hatem A. Kandeel'}
-        </h1>
-        <div style={{fontSize:'1.15rem', color:'var(--gold)', minHeight:'34px', marginBottom:'18px', fontWeight:600}}>{text}<span style={{opacity:.6}}>|</span></div>
-        <p style={{color:'var(--text-muted)', fontSize:'1rem', maxWidth:'620px', lineHeight:'1.8', marginBottom:'8px'}}>
+        </motion.h1>
+        <motion.div initial={{opacity:0, y:14}} animate={{opacity:1, y:0}} transition={{duration:.6, delay:.42}} style={{fontSize:'1.15rem', color:'var(--gold)', minHeight:'34px', marginBottom:'18px', fontWeight:600}}>{text}<span style={{opacity:.6}}>|</span></motion.div>
+        <motion.p initial={{opacity:0, y:14}} animate={{opacity:1, y:0}} transition={{duration:.6, delay:.54}} style={{color:'var(--text-muted)', fontSize:'1rem', maxWidth:'620px', lineHeight:'1.8', marginBottom:'8px'}}>
           {isAr ? 'قائد تجاري يدمج الخبرة العملية مع ذكاء الأعمال والاستراتيجية المبنية على البيانات' : 'Commercial Leader transitioning into Business Intelligence & Data-Driven Strategy'}
-        </p>
+        </motion.p>
 
-        <div style={{display:'flex', gap:'15px', marginTop:'26px', flexWrap:'wrap', justifyContent:'center'}}>
+        <motion.div initial={{opacity:0, y:14}} animate={{opacity:1, y:0}} transition={{duration:.6, delay:.66}} style={{display:'flex', gap:'15px', marginTop:'26px', flexWrap:'wrap', justifyContent:'center'}}>
           <a href="#contact" className="gold-btn" style={{padding:'14px 32px', textDecoration:'none', fontSize:'13px', display:'inline-block'}}>
             {isAr ? 'وظفني' : 'Hire Me'}
           </a>
@@ -743,10 +988,10 @@ function AppContent() {
           <a href={process.env.PUBLIC_URL + "/cv.pdf"} download="Hatem_Kandeel_CV.pdf" className="pill-btn" style={{padding:'14px 32px', textDecoration:'none', fontSize:'13px', display:'inline-block', borderColor:'var(--text-muted)', color:'var(--text)'}}>
             {isAr ? '📄 تحميل السيرة الذاتية' : '📄 Download CV'}
           </a>
-        </div>
+        </motion.div>
 
         {/* Stats */}
-        <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(120px, 1fr))', gap:'18px', marginTop:'50px', width:'100%', maxWidth:'760px'}}>
+        <motion.div initial={{opacity:0, y:20}} animate={{opacity:1, y:0}} transition={{duration:.6, delay:.78}} style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(120px, 1fr))', gap:'18px', marginTop:'50px', width:'100%', maxWidth:'760px'}}>
           {[
             {num:'20+', label: isAr ? 'سنوات خبرة' : 'Years Experience', Icon: TrendingUp},
             {num:'200%', label: isAr ? 'نمو في الإيرادات' : 'Revenue Growth', Icon: LineChart},
@@ -759,7 +1004,7 @@ function AppContent() {
               <div style={{color:'var(--text-muted)', fontSize:'10px', letterSpacing:'.05em', marginTop:'4px', textTransform:'uppercase'}}>{item.label}</div>
             </div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Video Intro */}
         <div style={{marginTop:'60px', width:'100%', maxWidth:'800px'}}>
@@ -791,6 +1036,8 @@ function AppContent() {
           </div>
         </div>
       </motion.section>
+
+      <SectionDivider variant="flow" />
 
       {/* ABOUT */}
       <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="about" style={{padding:'90px 24px', maxWidth:'1150px', margin:'0 auto', display:'flex', gap:'50px', alignItems:'flex-start', flexWrap:'wrap'}}>
@@ -912,7 +1159,12 @@ function AppContent() {
       </motion.section>
 
       {/* ACHIEVEMENTS */}
-      <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="achievements" style={{padding:'80px 24px', backgroundColor:'var(--bg-elevated)', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)'}}>
+      <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="achievements" style={{padding:'80px 24px', backgroundColor:'var(--bg-elevated)', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)', position:'relative', overflow:'hidden'}}>
+        <div className="hero-particles" style={{opacity:.5}}>
+          {[...Array(8)].map((_, i) => (
+            <span key={i} className="hero-particle" style={{left:`${(i * 12.4) % 100}%`, animationDuration:`${12 + (i % 4) * 3}s`, animationDelay:`${(i * 1.3) % 9}s`}}/>
+          ))}
+        </div>
         <div style={{maxWidth:'1000px', margin:'0 auto'}}>
           <p style={{color:'var(--gold)', letterSpacing:'3px', fontSize:'13px', marginBottom:'10px', textAlign:'center'}}>
             {isAr ? 'النتائج بالأرقام' : 'RESULTS BY THE NUMBERS'}
@@ -1070,15 +1322,21 @@ function AppContent() {
         </div>
       </motion.section>
 
+      <SectionDivider variant="diamonds" />
+
       {/* SKILLS */}
       <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="skills" style={{padding:'100px 40px', backgroundColor:'var(--bg)'}}>
         <div style={{maxWidth:'1100px', margin:'0 auto'}}>
           <p style={{color:'var(--gold)', letterSpacing:'3px', fontSize:'13px', marginBottom:'10px', textAlign:'center'}}>
             {isAr ? 'ما أقدمه' : 'WHAT I BRING'}
           </p>
-          <h2 style={{fontSize:'2.5rem', fontWeight:'700', marginBottom:'15px', textAlign:'center', background:'linear-gradient(135deg, var(--gold-bright), var(--gold))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>
-            {isAr ? 'المهارات والخبرات' : 'Skills & Expertise'}
-          </h2>
+          <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'16px', flexWrap:'wrap'}}>
+            {!isMobile && <DataCubeAccent size={70}/>}
+            <h2 style={{fontSize:'2.5rem', fontWeight:'700', marginBottom:'15px', textAlign:'center', background:'linear-gradient(135deg, var(--gold-bright), var(--gold))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>
+              {isAr ? 'المهارات والخبرات' : 'Skills & Expertise'}
+            </h2>
+            {!isMobile && <DataCubeAccent size={70}/>}
+          </div>
           <p style={{color:'var(--text-dim)', textAlign:'center', marginBottom:'60px', fontSize:'13px'}}>
             {isAr ? '💡 انقر على أي مهارة لمعرفة المزيد' : '💡 Click on any skill to learn more'}
           </p>
@@ -1600,8 +1858,18 @@ function AppContent() {
                 ? 'خريطة ذهنية شاملة لملفي المهني — تغطي الخبرة والمهارات والشهادات والرؤية الاستراتيجية.'
                 : 'A comprehensive mind map of my professional profile — covering experience, skills, certifications, and strategic vision.'}
             </p>
-            <img src={process.env.PUBLIC_URL + "/projects/mindmap.png"} alt="Mind Map"
-              loading="lazy" style={{width:'100%', borderRadius:'12px', border:'1px solid rgba(197,168,128,0.3)'}}/>
+            <div className="glass-card" style={{borderRadius:'16px', padding: isMobile ? '16px 8px' : '30px'}}>
+              <div style={{overflowX: isMobile ? 'auto' : 'visible', WebkitOverflowScrolling:'touch'}}>
+                <div style={{minWidth: isMobile ? '760px' : 'auto'}}>
+                  <MindMapVisual isAr={isAr}/>
+                </div>
+              </div>
+              {isMobile && (
+                <p style={{color:'var(--text-dim)', fontSize:'10px', textAlign:'center', marginTop:'8px'}}>
+                  {isAr ? '👉 مرر لليمين واليسار لعرض الخريطة كاملة' : '👉 Swipe left/right to see the full map'}
+                </p>
+              )}
+            </div>
           </div>
 
           {/* Videos */}
@@ -1639,8 +1907,15 @@ function AppContent() {
         </div>
       </motion.section>
 
+      <SectionDivider variant="badge" Icon={Cpu} />
+
       {/* PLATFORMS */}
-      <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="platforms" style={{padding:'100px 24px', maxWidth:'1150px', margin:'0 auto'}}>
+      <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="platforms" style={{padding:'100px 24px', maxWidth:'1150px', margin:'0 auto', position:'relative', overflow:'hidden'}}>
+        <div className="hero-particles" style={{opacity:.5}}>
+          {[...Array(8)].map((_, i) => (
+            <span key={i} className="hero-particle" style={{left:`${(i * 12.4) % 100}%`, animationDuration:`${12 + (i % 4) * 3}s`, animationDelay:`${(i * 1.3) % 9}s`}}/>
+          ))}
+        </div>
         <p style={{color:'var(--gold)', letterSpacing:'3px', fontSize:'13px', marginBottom:'10px', textAlign:'center'}}>
           {isAr ? 'هندسة البرمجيات' : 'SOFTWARE ENGINEERING'}
         </p>
@@ -1690,6 +1965,43 @@ function AppContent() {
         </div>
       </motion.section>
 
+      <SectionDivider variant="flow" />
+
+      {/* ABOUT MIRNEX */}
+      <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="mirnex" style={{padding:'80px 24px', maxWidth:'1100px', margin:'0 auto'}}>
+        <div className="glass-card" style={{borderRadius:'22px', overflow:'hidden', display:'grid', gridTemplateColumns: isMobile ? '1fr' : '1.05fr 1fr', alignItems:'center'}}>
+          <div style={{padding: isMobile ? '30px 26px 10px' : '46px'}}>
+            <p style={{color:'var(--gold)', letterSpacing:'3px', fontSize:'12px', marginBottom:'10px'}}>
+              {isAr ? 'الهوية والعلامة' : 'THE BRAND BEHIND THE PRODUCTS'}
+            </p>
+            <h2 className="font-serif-ui" style={{fontSize:'1.9rem', fontWeight:700, marginBottom:'18px', background:'linear-gradient(135deg, var(--gold-bright), var(--gold))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>
+              {isAr ? 'ما هي ميرنكس؟' : 'What is Mirnex?'}
+            </h2>
+            <p style={{color:'var(--text-muted)', fontSize:'0.93rem', lineHeight:'1.9', marginBottom:'16px'}}>
+              {isAr
+                ? '"ميرنكس" هي العلامة الأم التي تجمع تحت مظلتها جميع مشاريعي في مجال تحليل البيانات وذكاء الأعمال؛ من الكتب المرجعية والقوالب الجاهزة، إلى منصات برمجية متكاملة كأنظمة تخطيط الموارد المؤسسية وإدارة علاقات العملاء. وهي ليست مجرد اسم يُطلق على منتج، بل هوية موحّدة تعكس منهجي في التفكير: تبسيط البيانات المعقّدة، والربط بين الأدوات المختلفة، وتحويلها إلى قرارات ذكية.'
+                : "Mirnex is the parent brand that unites everything I build in data analytics and business intelligence — from reference books and ready-made templates, to full SaaS platforms like the ERP and CRM. It's not just a product name; it's a consistent identity for how I think: simplify complex data, connect the tools together, and turn them into intelligent decisions."}
+            </p>
+            <p style={{color:'var(--text-dim)', fontSize:'12px', fontStyle:'italic', marginBottom:'20px'}}>
+              {isAr ? '"التالي. الاتصال. الذكاء." — شعار ميرنكس' : '"Next. Connect. Intelligence." — the Mirnex tagline'}
+            </p>
+            <div style={{display:'flex', gap:'10px', flexWrap:'wrap'}}>
+              {[
+                isAr ? 'كتب مرجعية' : 'Reference Books',
+                isAr ? 'قوالب وأدوات' : 'Templates & Tools',
+                isAr ? 'منصات برمجية' : 'SaaS Platforms',
+              ].map((tag, i) => (
+                <span key={i} style={{fontSize:'11px', color:'var(--gold)', border:'1px solid var(--border-strong)', padding:'5px 14px', borderRadius:'999px'}}>{tag}</span>
+              ))}
+            </div>
+          </div>
+          <div style={{padding: isMobile ? '10px 26px 30px' : '20px'}}>
+            <img src={process.env.PUBLIC_URL + "/images/mirnex-brand.jpg"} alt="Mirnex — Next. Connect. Intelligence."
+              loading="lazy" style={{width:'100%', borderRadius:'14px', display:'block'}}/>
+          </div>
+        </div>
+      </motion.section>
+
       {/* BOOKS */}
       <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="books" style={{padding:'100px 24px', maxWidth:'1150px', margin:'0 auto'}}>
         <p style={{color:'var(--gold)', letterSpacing:'3px', fontSize:'13px', marginBottom:'10px', textAlign:'center'}}>
@@ -1704,10 +2016,8 @@ function AppContent() {
             <div>
               <img src={process.env.PUBLIC_URL + book.cover} alt={isAr ? book.titleAr : book.titleEn}
                 loading="lazy" style={{width:'100%', borderRadius:'10px', boxShadow:'0 10px 30px var(--shadow-color)'}}/>
-              {isAr && (
-                <img src={process.env.PUBLIC_URL + book.infographicAr} alt={book.titleAr}
-                  loading="lazy" style={{width:'100%', borderRadius:'10px', marginTop:'16px', border:'1px solid var(--border)'}}/>
-              )}
+              <img src={process.env.PUBLIC_URL + (isAr ? book.infographicAr : book.infographicEn)} alt={isAr ? book.titleAr : book.titleEn}
+                loading="lazy" style={{width:'100%', borderRadius:'10px', marginTop:'16px', border:'1px solid var(--border)'}}/>
             </div>
             <div>
               <h3 className="font-serif-ui" style={{fontSize:'1.5rem', fontWeight:700, color:'var(--text)', marginBottom:'14px'}}>
@@ -1733,12 +2043,19 @@ function AppContent() {
                 </button>
               </div>
               {activeBookVideo === book.id && (
-                <div style={{position:'relative', paddingBottom:'56.25%', height:0, borderRadius:'12px', overflow:'hidden', marginTop:'20px', border:'1px solid var(--border)'}}>
-                  <iframe
-                    src={`https://www.youtube.com/embed/${isAr ? book.videoAr : book.videoEn}`}
-                    title={isAr ? book.titleAr : book.titleEn}
-                    style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}}
-                    frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen/>
+                <div>
+                  <div style={{position:'relative', paddingBottom:'56.25%', height:0, borderRadius:'12px', overflow:'hidden', marginTop:'20px', border:'1px solid var(--border)'}}>
+                    <iframe
+                      src={`https://www.youtube.com/embed/${isAr ? book.videoAr : book.videoEn}`}
+                      title={isAr ? book.titleAr : book.titleEn}
+                      style={{position:'absolute', top:0, left:0, width:'100%', height:'100%'}}
+                      frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowFullScreen/>
+                  </div>
+                  <a href="https://youtube.com/@hatemkandeel-k2b" target="_blank" rel="noopener noreferrer"
+                    style={{display:'inline-flex', alignItems:'center', gap:'8px', marginTop:'14px', color:'var(--text-muted)', fontSize:'12px', textDecoration:'none'}}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF0000"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    {isAr ? 'زور قناتي على يوتيوب لمزيد من الفيديوهات' : 'Visit my YouTube channel for more videos'}
+                  </a>
                 </div>
               )}
             </div>
@@ -1749,15 +2066,21 @@ function AppContent() {
         </p>
       </motion.section>
 
+      <SectionDivider variant="diamonds" />
+
       {/* RESOURCES / PRODUCTS */}
       <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="resources" style={{padding:'100px 24px', backgroundColor:'var(--bg-elevated)', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)'}}>
         <div style={{maxWidth:'1150px', margin:'0 auto'}}>
           <p style={{color:'var(--gold)', letterSpacing:'3px', fontSize:'13px', marginBottom:'10px', textAlign:'center'}}>
             {isAr ? 'موارد ومنتجات' : 'RESOURCES & PRODUCTS'}
           </p>
-          <h2 className="font-serif-ui" style={{fontSize:'2.3rem', fontWeight:700, marginBottom:'20px', textAlign:'center', background:'linear-gradient(135deg, var(--gold-bright), var(--gold))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>
-            {isAr ? 'مكتبة الموارد' : 'Resource Library'}
-          </h2>
+          <div style={{display:'flex', alignItems:'center', justifyContent:'center', gap:'16px', flexWrap:'wrap'}}>
+            {!isMobile && <DataCubeAccent size={64}/>}
+            <h2 className="font-serif-ui" style={{fontSize:'2.3rem', fontWeight:700, marginBottom:'20px', textAlign:'center', background:'linear-gradient(135deg, var(--gold-bright), var(--gold))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>
+              {isAr ? 'مكتبة الموارد' : 'Resource Library'}
+            </h2>
+            {!isMobile && <DataCubeAccent size={64}/>}
+          </div>
 
           {/* FREE */}
           <h3 style={{color:'var(--text)', fontSize:'1.1rem', fontWeight:700, marginBottom:'6px', marginTop:'40px'}}>
@@ -1910,6 +2233,20 @@ function AppContent() {
                     </div>
                   </div>
                 </a>
+
+                <a href="https://youtube.com/@hatemkandeel-k2b" target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}>
+                  <div className="glass-card" style={{borderRadius:'12px', padding:'20px 24px', display:'flex', alignItems:'center', gap:'18px'}}>
+                    <div style={{width:'46px', height:'46px', borderRadius:'50%', background:'rgba(255,0,0,0.12)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0}}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="#FF0000">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                      </svg>
+                    </div>
+                    <div>
+                      <p style={{color:'var(--gold)', fontSize:'11px', letterSpacing:'1px', marginBottom:'3px'}}>{isAr ? 'يوتيوب' : 'YouTube'}</p>
+                      <p style={{color:'var(--text)', fontSize:'14px', fontWeight:600}}>{isAr ? 'قناة حاتم قنديل' : 'Hatem Kandeel Channel'}</p>
+                    </div>
+                  </div>
+                </a>
               </div>
 
               {/* QR Code */}
@@ -1937,7 +2274,7 @@ function AppContent() {
 
       {/* FOOTER */}
       <footer style={{backgroundColor:'var(--bg)', borderTop:'1px solid rgba(197,168,128,0.2)', padding:'40px 24px 30px', textAlign:'center'}}>
-        <img src={process.env.PUBLIC_URL + "/images/logo.png"} alt="HK Logo" style={{height:'40px', marginBottom:'15px'}}/>
+        <img src={process.env.PUBLIC_URL + (theme === 'dark' ? "/images/mirnex-logo-dark.png" : "/images/mirnex-logo-light.png")} alt="Mirnex Logo" style={{height:'40px', marginBottom:'15px'}}/>
         <p style={{color:'var(--text-dim)', fontSize:'13px', marginBottom:'5px'}}>
           {isAr ? 'حاتم أحمد قنديل' : 'Hatem A. Kandeel'}
         </p>

@@ -50,6 +50,10 @@ html {
   --on-gold: #FAF7F2;
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
 body {
   background: var(--bg);
   color: var(--text);
@@ -88,6 +92,15 @@ body {
   border-color: var(--border-strong);
   box-shadow: 0 12px 40px rgba(99,102,241,0.15);
   transform: translateY(-5px);
+}
+
+[data-theme="light"] .glass-card {
+  box-shadow: 0 4px 16px rgba(31,25,15,.08), 0 1px 3px rgba(31,25,15,.06);
+  border-color: rgba(156,122,60,.35);
+}
+[data-theme="light"] .glass-card:hover {
+  box-shadow: 0 16px 36px rgba(79,70,229,.16), 0 4px 12px rgba(31,25,15,.1);
+  border-color: var(--gold);
 }
 
 /* ============================================================
@@ -143,6 +156,26 @@ body {
 @media (max-width: 768px) {
   .gate .lang-card { width: 140px; padding: 20px 14px; }
 }
+
+.gate-corner {
+  position: absolute; width: 90px; height: 90px; opacity: 0.55; pointer-events: none;
+}
+[data-theme="light"] .gate-corner { opacity: 0.85; }
+.gate-corner-tl { top: 20px; left: 20px; }
+.gate-corner-tr { top: 20px; right: 20px; }
+.gate-corner-bl { bottom: 20px; left: 20px; }
+.gate-corner-br { bottom: 20px; right: 20px; }
+@media (max-width: 640px) {
+  .gate-corner { width: 56px; height: 56px; }
+}
+
+.gate-mandala {
+  position: absolute; top: 50%; left: 50%; width: min(700px, 90vw); height: min(700px, 90vw);
+  transform: translate(-50%, -50%); opacity: 0.07; pointer-events: none;
+  animation: mandala-spin 90s linear infinite;
+}
+[data-theme="light"] .gate-mandala { opacity: 0.14; }
+@keyframes mandala-spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
 /* ============================================================
    NAVBAR
@@ -219,6 +252,237 @@ body {
   transform: translateX(-50%);
 }
 @keyframes orbit-spin { to { transform: rotate(360deg); } }
+
+/* ============================================================
+   HERO — journey / ascent motion effects
+============================================================ */
+.hero-spotlight {
+  position: absolute; top: 50%; left: 50%; width: 420px; height: 420px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--gold) 45%, transparent) 0%, color-mix(in srgb, var(--violet) 22%, transparent) 45%, transparent 72%);
+  filter: blur(6px);
+  animation: spotlight-pulse 5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes spotlight-pulse {
+  0%, 100% { opacity: .55; transform: translate(-50%, -50%) scale(1); }
+  50% { opacity: .9; transform: translate(-50%, -50%) scale(1.08); }
+}
+[data-theme="light"] .hero-spotlight {
+  opacity: 1;
+  background: radial-gradient(circle, color-mix(in srgb, var(--violet) 30%, transparent) 0%, color-mix(in srgb, var(--gold) 35%, transparent) 45%, transparent 72%);
+}
+
+.hero-particles { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.hero-particle {
+  position: absolute; bottom: -20px; width: 4px; height: 4px; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 6px 1px color-mix(in srgb, var(--gold) 70%, transparent);
+  animation-name: particle-rise; animation-timing-function: linear; animation-iteration-count: infinite;
+}
+[data-theme="light"] .hero-particle {
+  width: 5px; height: 5px;
+  background: var(--violet);
+  box-shadow: 0 0 8px 2px color-mix(in srgb, var(--violet) 55%, transparent), 0 1px 2px rgba(31,25,15,.25);
+}
+@keyframes particle-rise {
+  0% { transform: translateY(0) scale(0.6); opacity: 0; }
+  10% { opacity: .8; }
+  90% { opacity: .5; }
+  100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+}
+
+.hero-scanline {
+  position: absolute; left: 0; width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold) 50%, transparent);
+  opacity: .5; pointer-events: none;
+  animation: scan-sweep 7s ease-in-out infinite;
+}
+[data-theme="light"] .hero-scanline {
+  opacity: 1; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--violet) 50%, transparent);
+  box-shadow: 0 0 8px 1px color-mix(in srgb, var(--violet) 50%, transparent);
+}
+@keyframes scan-sweep {
+  0% { top: 8%; opacity: 0; }
+  10% { opacity: .6; }
+  50% { top: 92%; opacity: .6; }
+  60% { opacity: 0; }
+  100% { top: 92%; opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-spotlight, .hero-particle, .hero-scanline, .gate-mandala, .hero-star, .hero-bars-glow-dot, .hero-circuit-node, .hero-cloud { animation: none !important; }
+}
+
+/* ============================================================
+   HERO BANNER — drifting clouds + skyline depth
+============================================================ */
+.hero-cloud {
+  position: absolute; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--gold) 18%, transparent), transparent 70%);
+  filter: blur(8px);
+  animation-name: cloud-drift; animation-timing-function: ease-in-out; animation-iteration-count: infinite;
+}
+[data-theme="light"] .hero-cloud {
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--violet) 16%, transparent), transparent 70%);
+}
+@keyframes cloud-drift {
+  0% { transform: translateX(-6%); }
+  50% { transform: translateX(6%); }
+  100% { transform: translateX(-6%); }
+}
+.hero-skyline { position: absolute; bottom: 0; left: 0; width: 100%; opacity: 0.16; pointer-events: none; }
+[data-theme="light"] .hero-skyline { opacity: 0.22; }
+
+.hero-star {
+  position: absolute; border-radius: 50%; background: var(--gold); pointer-events: none;
+  animation-name: star-twinkle; animation-timing-function: ease-in-out; animation-iteration-count: infinite;
+}
+[data-theme="light"] .hero-star { background: var(--violet); }
+@keyframes star-twinkle {
+  0%, 100% { opacity: .15; transform: scale(0.8); }
+  50% { opacity: .9; transform: scale(1.3); }
+}
+
+.hero-bars { position: absolute; top: 12%; opacity: 0.4; pointer-events: none; }
+[data-theme="light"] .hero-bars { opacity: 0.5; }
+.hero-bars-glow-dot { animation: bar-glow-pulse 2.4s ease-in-out infinite; }
+@keyframes bar-glow-pulse { 0%,100% { opacity: .6; r: 5; } 50% { opacity: 1; r: 8; } }
+
+.hero-circuit { position: absolute; inset: 0; opacity: 0.35; pointer-events: none; }
+[data-theme="light"] .hero-circuit { opacity: 0.3; }
+.hero-circuit-node { animation: circuit-node-pulse 3s ease-in-out infinite; }
+@keyframes circuit-node-pulse { 0%,100% { opacity: .3; } 50% { opacity: 1; } }
+
+/* ============================================================
+   FLIGHT PATH — the "journey" side rail (desktop only)
+============================================================ */
+.flight-rail {
+  position: absolute; top: 90px; bottom: 30px; width: 34px;
+  z-index: 5; pointer-events: none;
+  display: none;
+}
+@media (min-width: 1080px) {
+  .flight-rail { display: block; }
+}
+.flight-rail.side-left { left: 14px; }
+.flight-rail.side-right { right: 14px; }
+.flight-rail-line {
+  position: absolute; top: 28px; bottom: 28px; left: 50%; width: 1px;
+  background: repeating-linear-gradient(to bottom, var(--border-strong) 0 6px, transparent 6px 12px);
+  transform: translateX(-50%);
+}
+.flight-rail-plane {
+  position: absolute; left: 50%; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--glass-bg); backdrop-filter: blur(8px);
+  border: 1px solid var(--border-strong);
+  display: flex; align-items: center; justify-content: center;
+  transform: translate(-50%, -50%); transition: top .15s linear;
+  box-shadow: 0 0 16px 2px color-mix(in srgb, var(--gold) 45%, transparent);
+}
+[data-theme="light"] .flight-rail-plane {
+  box-shadow: 0 0 14px 3px color-mix(in srgb, var(--violet) 40%, transparent), 0 2px 8px rgba(31,25,15,.15);
+  border-color: var(--violet);
+}
+.flight-waypoint {
+  position: absolute; left: 50%; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--bg-elevated); border: 1.5px solid var(--border-strong);
+  transform: translate(-50%, -50%); transition: background .4s, border-color .4s, box-shadow .4s;
+}
+.flight-waypoint.reached {
+  background: var(--gold); border-color: var(--gold);
+  box-shadow: 0 0 8px 2px color-mix(in srgb, var(--gold) 60%, transparent);
+}
+[data-theme="light"] .flight-waypoint { border-width: 2px; }
+[data-theme="light"] .flight-waypoint.reached {
+  background: var(--violet); border-color: var(--violet);
+  box-shadow: 0 0 8px 2px color-mix(in srgb, var(--violet) 55%, transparent);
+}
+.flight-marker-top, .flight-marker-bottom {
+  position: absolute; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px; border-radius: 50%;
+  color: var(--text-dim); opacity: .7;
+}
+.flight-marker-top { top: -2px; }
+.flight-marker-bottom { bottom: -2px; }
+
+/* ============================================================
+   MIND MAP GLOW
+============================================================ */
+.mm-pulse { animation: mm-pulse-anim 3.2s ease-in-out infinite; }
+@keyframes mm-pulse-anim {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .75; }
+}
+.mm-ring { animation: mm-ring-anim 3.2s ease-in-out infinite; transform-origin: center; transform-box: fill-box; }
+@keyframes mm-ring-anim {
+  0%, 100% { r: 52; opacity: .4; }
+  50% { r: 60; opacity: 0; }
+}
+
+/* ============================================================
+   DATA CUBE ACCENT
+============================================================ */
+.dc-core { animation: dc-core-pulse 2.6s ease-in-out infinite; }
+@keyframes dc-core-pulse { 0%,100% { opacity: 1; } 50% { opacity: .5; } }
+.dc-node { animation: dc-node-float 3.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes dc-node-float {
+  0%, 100% { transform: translateY(0); opacity: .7; }
+  50% { transform: translateY(-4px); opacity: 1; }
+}
+.dc-face { transition: opacity .3s; }
+
+/* ============================================================
+   SECTION DIVIDERS — playful, on-brand breaks between sections
+============================================================ */
+.divider-wrap {
+  display: flex; align-items: center; justify-content: center;
+  padding: 6px 24px; max-width: 1150px; margin: 0 auto;
+}
+
+/* Variant: flowing line with traveling spark */
+.divider-flow-track {
+  position: relative; flex: 1; height: 1px; max-width: 500px;
+  background: linear-gradient(90deg, transparent, var(--border-strong) 15%, var(--border-strong) 85%, transparent);
+}
+.divider-flow-spark {
+  position: absolute; top: 50%; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold); box-shadow: 0 0 10px 2px rgba(197,168,128,.7);
+  transform: translateY(-50%);
+  animation: spark-travel 4.5s ease-in-out infinite;
+}
+@keyframes spark-travel {
+  0% { left: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { left: 100%; opacity: 0; }
+}
+
+/* Variant: badge with orbiting dot */
+.divider-badge-ring {
+  position: relative; width: 46px; height: 46px; border-radius: 50%;
+  border: 1px solid var(--border-strong); display: flex; align-items: center; justify-content: center;
+  background: var(--glass-bg); flex-shrink: 0;
+}
+.divider-badge-ring::before {
+  content: ''; position: absolute; top: -1px; left: -1px; right: -1px; bottom: -1px;
+  border-radius: 50%; border: 1px dotted var(--gold); opacity: .6;
+  animation: orbit-spin 12s linear infinite;
+}
+
+/* Variant: three diamonds */
+.divider-diamonds { display: flex; align-items: center; gap: 10px; }
+.divider-diamond {
+  width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg);
+  animation: diamond-pulse 2.4s ease-in-out infinite;
+}
+.divider-diamond:nth-child(2) { background: var(--violet); animation-delay: .3s; }
+.divider-diamond:nth-child(3) { animation-delay: .6s; }
+@keyframes diamond-pulse {
+  0%, 100% { opacity: .4; transform: rotate(45deg) scale(0.85); }
+  50% { opacity: 1; transform: rotate(45deg) scale(1.15); }
+}
 
 /* ============================================================
    TIMELINE (Experience)

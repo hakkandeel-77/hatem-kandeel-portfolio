@@ -1240,7 +1240,7 @@ function AppContent() {
 
           {/* DATA CHARTS */}
           <div style={{marginTop:'70px', display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(320px, 1fr))', gap:'30px'}}>
-            <div className="glass-card" style={{borderRadius:'16px', padding:'30px'}}>
+            <div className="glass-card" style={{borderRadius:'16px', padding: isMobile ? '18px 10px' : '30px'}}>
               <h4 style={{color:'var(--text)', fontSize:'1rem', fontWeight:700, marginBottom:'6px'}}>
                 {isAr ? 'أبرز المهارات التقنية والتجارية' : 'Top Technical & Business Skills'}
               </h4>
@@ -1248,13 +1248,13 @@ function AppContent() {
                 {isAr ? 'مستوى الإتقان الذاتي المُقيَّم (%)' : 'Self-assessed proficiency level (%)'}
               </p>
               <div dir="ltr">
-                <ResponsiveContainer width="100%" height={320}>
-                  <BarChart data={topSkillsChartData} layout="vertical" margin={{ top: 0, right: 10, left: 10, bottom: 0 }}>
+                <ResponsiveContainer width="100%" height={isMobile ? 260 : 320}>
+                  <BarChart data={topSkillsChartData} layout="vertical" margin={{ top: 0, right: 10, left: 0, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" horizontal={false}/>
                     <XAxis type="number" domain={[0,100]} tick={{fill:'var(--text-dim)', fontSize:11}} axisLine={{stroke:'var(--border)'}} tickLine={false}/>
-                    <YAxis type="category" dataKey="name" width={150} orientation="left" tick={{fill:'var(--text-muted)', fontSize:11}} axisLine={false} tickLine={false}/>
+                    <YAxis type="category" dataKey="name" width={isMobile ? 92 : 150} orientation="left" tick={{fill:'var(--text-muted)', fontSize: isMobile ? 9.5 : 11}} axisLine={false} tickLine={false}/>
                     <Tooltip contentStyle={{background:'var(--bg-elevated)', border:'1px solid var(--border-strong)', borderRadius:'8px', color:'var(--text)'}} formatter={(v) => [`${v}%`, isAr ? 'المستوى' : 'Level']}/>
-                    <Bar dataKey="level" radius={[0,6,6,0]}>
+                    <Bar dataKey="level" radius={[0,6,6,0]} isAnimationActive={false}>
                       {topSkillsChartData.map((entry, idx) => (
                         <Cell key={idx} fill={idx % 2 === 0 ? 'var(--gold)' : 'var(--violet)'} />
                       ))}
@@ -1264,7 +1264,7 @@ function AppContent() {
               </div>
             </div>
 
-            <div className="glass-card" style={{borderRadius:'16px', padding:'30px'}}>
+            <div className="glass-card" style={{borderRadius:'16px', padding: isMobile ? '18px 10px' : '30px'}}>
               <h4 style={{color:'var(--text)', fontSize:'1rem', fontWeight:700, marginBottom:'6px'}}>
                 {isAr ? 'توزيع الشهادات حسب المصدر' : 'Certifications by Source'}
               </h4>
@@ -1272,9 +1272,9 @@ function AppContent() {
                 {isAr ? `${certTabs.reduce((s,t)=>s+t.count,0)} شهادة موثّقة إجمالًا` : `${certTabs.reduce((s,t)=>s+t.count,0)} verified certificates total`}
               </p>
               <div dir="ltr">
-                <ResponsiveContainer width="100%" height={280}>
+                <ResponsiveContainer width="100%" height={isMobile ? 230 : 280}>
                   <PieChart>
-                    <Pie data={certTabs} dataKey="count" nameKey="label" cx="50%" cy="50%" innerRadius={55} outerRadius={95} paddingAngle={3}>
+                    <Pie data={certTabs} dataKey="count" nameKey="label" cx="50%" cy="50%" innerRadius="45%" outerRadius="75%" paddingAngle={3} isAnimationActive={false}>
                       {certTabs.map((entry, idx) => (
                         <Cell key={idx} fill={pieColors[idx % pieColors.length]} />
                       ))}

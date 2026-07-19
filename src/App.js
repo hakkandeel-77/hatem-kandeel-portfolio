@@ -112,6 +112,32 @@ function DataCubeAccent({ size = 90 }) {
   );
 }
 
+function MobileImageCarousel({ images, altPrefix, onImageClick }) {
+  const [idx, setIdx] = useState(0);
+  const trackRef = React.useRef(null);
+  const handleScroll = () => {
+    const el = trackRef.current;
+    if (!el) return;
+    const newIdx = Math.round(el.scrollLeft / el.clientWidth);
+    if (newIdx !== idx) setIdx(newIdx);
+  };
+  return (
+    <div>
+      <div ref={trackRef} onScroll={handleScroll}
+        style={{display:'flex', overflowX:'auto', scrollSnapType:'x mandatory', WebkitOverflowScrolling:'touch', borderRadius:'10px', gap:'0'}}>
+        {images.map((src, i) => (
+          <img key={i} src={src} alt={`${altPrefix} ${i+1}`} loading="lazy" onClick={() => onImageClick(src, `${altPrefix} ${i+1}`)}
+            style={{flex:'0 0 100%', width:'100%', scrollSnapAlign:'center', borderRadius:'10px', border:'1px solid rgba(197,168,128,0.3)', cursor:'pointer'}}/>
+        ))}
+      </div>
+      <div style={{display:'flex', justifyContent:'center', alignItems:'center', gap:'6px', marginTop:'10px'}}>
+        <span style={{color:'var(--text-dim)', fontSize:'11px'}}>{idx + 1} / {images.length}</span>
+        <span style={{color:'var(--text-dim)', fontSize:'10px', marginInlineStart:'8px'}}>👉 Swipe</span>
+      </div>
+    </div>
+  );
+}
+
 class ErrorBoundary extends React.Component {
   constructor(props) { super(props); this.state = { hasError: false }; }
   static getDerivedStateFromError() { return { hasError: true }; }
@@ -142,6 +168,7 @@ function AppContent() {
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 860 : false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [heroVideoLoaded, setHeroVideoLoaded] = useState(false);
+  const [lightbox, setLightbox] = useState(null); // { src, alt }
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth <= 860);
     window.addEventListener('resize', onResize, { passive: true });
@@ -1235,7 +1262,8 @@ function AppContent() {
           <div style={{marginTop:'50px'}}>
             <img src={process.env.PUBLIC_URL + (isAr ? "/images/growth-story-ar.jpg" : "/images/growth-story-en.jpg")}
               alt={isAr ? "مسيرة نجاح حاتم قنديل المهنية" : "Hatem Kandeel: 20 Years of Strategic Growth"}
-              loading="lazy" style={{width:'100%', borderRadius:'14px', border:'1px solid var(--border)'}}/>
+              loading="lazy" onClick={() => setLightbox({ src: process.env.PUBLIC_URL + (isAr ? "/images/growth-story-ar.jpg" : "/images/growth-story-en.jpg"), alt: isAr ? "مسيرة نجاح حاتم قنديل المهنية" : "Hatem Kandeel: 20 Years of Strategic Growth" })}
+              style={{width:'100%', borderRadius:'14px', border:'1px solid var(--border)', cursor:'pointer'}}/>
           </div>
 
           {/* DATA CHARTS */}
@@ -1290,7 +1318,7 @@ function AppContent() {
       </motion.section>
 
       {/* EXPERIENCE */}
-      <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="experience" style={{padding:'100px 40px', backgroundColor:'var(--bg-elevated)'}}>
+      <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="experience" style={{padding: isMobile ? '60px 16px' : '100px 40px', backgroundColor:'var(--bg-elevated)'}}>
         <div style={{maxWidth:'900px', margin:'0 auto'}}>
           <p style={{color:'var(--gold)', letterSpacing:'3px', fontSize:'13px', marginBottom:'10px', textAlign:'center'}}>
             {isAr ? 'رحلتي المهنية' : 'MY JOURNEY'}
@@ -1299,13 +1327,15 @@ function AppContent() {
             {isAr ? 'الخبرة المهنية' : 'Professional Experience'}
           </h2>
           <div style={{position:'relative'}}>
-            <div style={{position:'absolute', [isAr ? 'right' : 'left']:'20px', top:0, bottom:0, width:'2px', backgroundColor:'var(--gold)', opacity:0.3}}/>
+            {!isMobile && <div style={{position:'absolute', [isAr ? 'right' : 'left']:'20px', top:0, bottom:0, width:'2px', backgroundColor:'var(--gold)', opacity:0.3}}/>}
             {experiences.map((exp, index) => (
-              <div key={index} style={{display:'flex', gap:'40px', marginBottom:'50px', position:'relative', flexDirection: isAr ? 'row-reverse' : 'row'}}>
-                <div style={{width:'42px', height:'42px', borderRadius:'50%', backgroundColor:'var(--bg-elevated)', border:'2px solid var(--gold)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, zIndex:1}}>
-                  <div style={{width:'12px', height:'12px', borderRadius:'50%', backgroundColor:'var(--gold)'}}/>
-                </div>
-                <div className="glass-card timeline-node" style={{borderRadius:'12px', padding:'25px 30px', flex:1}}>
+              <div key={index} style={{display:'flex', gap: isMobile ? '10px' : '40px', marginBottom: isMobile ? '20px' : '50px', position:'relative', flexDirection: isAr ? 'row-reverse' : 'row'}}>
+                {!isMobile && (
+                  <div style={{width:'42px', height:'42px', borderRadius:'50%', backgroundColor:'var(--bg-elevated)', border:'2px solid var(--gold)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, zIndex:1}}>
+                    <div style={{width:'12px', height:'12px', borderRadius:'50%', backgroundColor:'var(--gold)'}}/>
+                  </div>
+                )}
+                <div className="glass-card timeline-node" style={{borderRadius:'12px', padding: isMobile ? '18px 16px' : '25px 30px', flex:1, borderTop: isMobile ? '3px solid var(--gold)' : undefined, minWidth:0}}>
                   <span style={{color:'var(--gold)', fontSize:'12px', letterSpacing:'2px'}}>{exp.period}</span>
                   <h3 style={{fontSize:'1.2rem', fontWeight:'700', margin:'8px 0 4px', color:'var(--text)'}}>{exp.title}</h3>
                   <p style={{color:'var(--gold)', fontSize:'14px', marginBottom:'4px'}}>{exp.company}</p>
@@ -1403,10 +1433,13 @@ function AppContent() {
               </button>
             ))}
           </div>
-          <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(220px, 1fr))', gap:'20px'}}>
+          <div style={isMobile
+            ? {display:'flex', overflowX:'auto', scrollSnapType:'x mandatory', WebkitOverflowScrolling:'touch', gap:'14px', paddingBottom:'6px'}
+            : {display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(220px, 1fr))', gap:'20px'}}>
             {certificates[activeTab].map((cert, i) => (
               <div key={i} onClick={() => setSelectedCert(cert)}
-                style={{backgroundColor:'var(--bg)', borderRadius:'12px', overflow:'hidden', border:'1px solid rgba(197,168,128,0.2)', cursor:'pointer', transition:'all 0.3s', boxShadow:'0 4px 15px var(--shadow-color)'}}
+                style={{backgroundColor:'var(--bg)', borderRadius:'12px', overflow:'hidden', border:'1px solid rgba(197,168,128,0.2)', cursor:'pointer', transition:'all 0.3s', boxShadow:'0 4px 15px var(--shadow-color)',
+                  ...(isMobile ? {flex:'0 0 85%', scrollSnapAlign:'center'} : {})}}
                 onMouseOver={e => { e.currentTarget.style.borderColor='var(--gold)'; e.currentTarget.style.transform='translateY(-5px)'; }}
                 onMouseOut={e => { e.currentTarget.style.borderColor='rgba(197,168,128,0.2)'; e.currentTarget.style.transform='translateY(0)'; }}>
                 <CertImage cert={cert} />
@@ -1418,6 +1451,11 @@ function AppContent() {
               </div>
             ))}
           </div>
+          {isMobile && (
+            <p style={{color:'var(--text-dim)', fontSize:'11px', textAlign:'center', marginTop:'10px'}}>
+              {isAr ? `👉 مرر لعرض ${certificates[activeTab].length} شهادة` : `👉 Swipe to browse ${certificates[activeTab].length} certificates`}
+            </p>
+          )}
         </div>
       </motion.section>
 
@@ -1573,6 +1611,20 @@ function AppContent() {
               <h4 style={{color:'var(--gold)', fontSize:'0.95rem', fontWeight:'600', marginBottom:'20px', letterSpacing:'1px'}}>
                 {isAr ? '📸 معرض الصور' : '📸 IMAGE GALLERY'}
               </h4>
+              {isMobile ? (
+                <MobileImageCarousel
+                  images={[
+                    '1- Cover Page.png','2- Project Overview.png','3- Executive Insights.png','4- Risks & Warnings.png','5- Recommendations.png','6- KPI Dashboard.png',
+                    ...(expandedGalleries.sports ? [
+                      '7- Executive Summary.png','8- Time Analysis.png','9- Time Analysis2.png','10- Product Analysis.png','11- Sales Analysis.png','12- Sales Analysis 2.png',
+                      '13- Sales Analysis 3.png','14- Retailer & Channel.png','15- Retailer & Channel 2.png','16- Retailer & Channel 3.png','17- Geographic View.png',
+                      '18- Geographic View map 2.png','19- Geographic View map 3.png','20- Sales Forecast.png','21- What-If Analysis.png','22- Category Detail.png','32- Conclusions.png'
+                    ] : [])
+                  ].map(img => process.env.PUBLIC_URL + "/projects2/" + encodeURIComponent(img))}
+                  altPrefix={isAr ? 'تحليل الشركة الرياضية' : 'Sports Analysis'}
+                  onImageClick={(src, alt) => setLightbox({ src, alt })}
+                />
+              ) : (
               <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(260px, 1fr))', gap:'15px', marginBottom:'20px'}}>
                 {[
                   '1- Cover Page.png',
@@ -1602,12 +1654,14 @@ function AppContent() {
                   ] : [])
                 ].map((img, i) => (
                   <img key={i} src={process.env.PUBLIC_URL + "/projects2/" + encodeURIComponent(img)} alt={`Sports Analysis ${i+1}`}
-                    loading="lazy" style={{width:'100%', borderRadius:'8px', border:'1px solid rgba(197,168,128,0.3)', cursor:'pointer', transition:'all 0.3s'}}
+                    loading="lazy" onClick={() => setLightbox({ src: process.env.PUBLIC_URL + "/projects2/" + encodeURIComponent(img), alt: `Sports Analysis ${i+1}` })}
+                    style={{width:'100%', borderRadius:'8px', border:'1px solid rgba(197,168,128,0.3)', cursor:'pointer', transition:'all 0.3s'}}
                     onMouseOver={e => { e.currentTarget.style.borderColor='var(--gold)'; e.currentTarget.style.transform='scale(1.02)'; }}
                     onMouseOut={e => { e.currentTarget.style.borderColor='rgba(197,168,128,0.3)'; e.currentTarget.style.transform='scale(1)'; }}
                   />
                 ))}
               </div>
+              )}
               <button onClick={() => toggleGallery('sports')} style={{backgroundColor:'var(--gold)', color:'var(--bg)', border:'none', padding:'10px 24px', borderRadius:'6px', fontSize:'0.9rem', fontWeight:'600', cursor:'pointer', transition:'all 0.3s'}}>
                 {expandedGalleries.sports ? (isAr ? 'إخفاء المزيد' : 'Show Less') : (isAr ? 'عرض المزيد (17+)' : 'Show More (17+)')}
               </button>
@@ -1698,6 +1752,16 @@ function AppContent() {
               <h4 style={{color:'var(--gold)', fontSize:'0.95rem', fontWeight:'600', marginBottom:'20px', letterSpacing:'1px'}}>
                 {isAr ? '📸 لقطات لوحة التحكم' : '📸 DASHBOARD SCREENSHOTS'}
               </h4>
+              {isMobile ? (
+                <MobileImageCarousel
+                  images={[
+                    'dashboard1.png','dashboard2.png','dashboard3.png','dashboard4.png','dashboard5.png','dashboard6.png',
+                    ...(expandedGalleries.retail ? ['dashboard7.png'] : [])
+                  ].map(img => process.env.PUBLIC_URL + `/projects/${img}`)}
+                  altPrefix={isAr ? 'لوحة التحكم' : 'Dashboard'}
+                  onImageClick={(src, alt) => setLightbox({ src, alt })}
+                />
+              ) : (
               <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(260px, 1fr))', gap:'15px', marginBottom:'20px'}}>
                 {[
                   'dashboard1.png',
@@ -1709,12 +1773,14 @@ function AppContent() {
                   ...(expandedGalleries.retail ? ['dashboard7.png'] : [])
                 ].map((img, i) => (
                   <img key={i} src={process.env.PUBLIC_URL + `/projects/${img}`} alt={`Dashboard ${i+1}`}
-                    loading="lazy" style={{width:'100%', borderRadius:'8px', border:'1px solid rgba(197,168,128,0.3)', cursor:'pointer', transition:'all 0.3s'}}
+                    loading="lazy" onClick={() => setLightbox({ src: process.env.PUBLIC_URL + `/projects/${img}`, alt: `Dashboard ${i+1}` })}
+                    style={{width:'100%', borderRadius:'8px', border:'1px solid rgba(197,168,128,0.3)', cursor:'pointer', transition:'all 0.3s'}}
                     onMouseOver={e => { e.currentTarget.style.borderColor='var(--gold)'; e.currentTarget.style.transform='scale(1.02)'; }}
                     onMouseOut={e => { e.currentTarget.style.borderColor='rgba(197,168,128,0.3)'; e.currentTarget.style.transform='scale(1)'; }}
                   />
                 ))}
               </div>
+              )}
               <button onClick={() => toggleGallery('retail')} style={{backgroundColor:'var(--gold)', color:'var(--bg)', border:'none', padding:'10px 24px', borderRadius:'6px', fontSize:'0.9rem', fontWeight:'600', cursor:'pointer', transition:'all 0.3s'}}>
                 {expandedGalleries.retail ? (isAr ? 'إخفاء المزيد' : 'Show Less') : (isAr ? 'عرض المزيد (1+)' : 'Show More (1+)')}
               </button>
@@ -1798,6 +1864,19 @@ function AppContent() {
               <h4 style={{color:'var(--gold)', fontSize:'0.95rem', fontWeight:'600', marginBottom:'20px', letterSpacing:'1px'}}>
                 {isAr ? '📸 لقطات المشاريع' : '📸 PROJECT SCREENSHOTS'}
               </h4>
+              {isMobile ? (
+                <MobileImageCarousel
+                  images={[
+                    'Project (1).png','Project (2).png','Project (3).png','Project (4).png','Project (5).png','Project (6).png',
+                    ...(expandedGalleries.excel ? [
+                      'Project (7).png','Project (8).png','Project (9).png','Project (10).png','Project (11).png','Project (12).png',
+                      'Project (13).png','Project (14).png','Project (15).png','Project (16).png','Project (17).png','Project (18).png'
+                    ] : [])
+                  ].map(img => process.env.PUBLIC_URL + `/New project/${img}`)}
+                  altPrefix={isAr ? 'مشروع Excel' : 'Excel Project'}
+                  onImageClick={(src, alt) => setLightbox({ src, alt })}
+                />
+              ) : (
               <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fill, minmax(260px, 1fr))', gap:'15px', marginBottom:'20px'}}>
                 {[
                   'Project (1).png',
@@ -1822,12 +1901,14 @@ function AppContent() {
                   ] : [])
                 ].map((img, i) => (
                   <img key={i} src={process.env.PUBLIC_URL + `/New project/${img}`} alt={`Excel Project ${i+1}`}
-                    loading="lazy" style={{width:'100%', borderRadius:'8px', border:'1px solid rgba(197,168,128,0.3)', cursor:'pointer', transition:'all 0.3s'}}
+                    loading="lazy" onClick={() => setLightbox({ src: process.env.PUBLIC_URL + `/New project/${img}`, alt: `Excel Project ${i+1}` })}
+                    style={{width:'100%', borderRadius:'8px', border:'1px solid rgba(197,168,128,0.3)', cursor:'pointer', transition:'all 0.3s'}}
                     onMouseOver={e => { e.currentTarget.style.borderColor='var(--gold)'; e.currentTarget.style.transform='scale(1.02)'; }}
                     onMouseOut={e => { e.currentTarget.style.borderColor='rgba(197,168,128,0.3)'; e.currentTarget.style.transform='scale(1)'; }}
                   />
                 ))}
               </div>
+              )}
               <button onClick={() => toggleGallery('excel')} style={{backgroundColor:'var(--gold)', color:'var(--bg)', border:'none', padding:'10px 24px', borderRadius:'6px', fontSize:'0.9rem', fontWeight:'600', cursor:'pointer', transition:'all 0.3s'}}>
                 {expandedGalleries.excel ? (isAr ? 'إخفاء المزيد' : 'Show Less') : (isAr ? 'عرض المزيد (12+)' : 'Show More (12+)')}
               </button>
@@ -1845,7 +1926,8 @@ function AppContent() {
                 : 'A visual summary of 20+ years of proven growth and digital innovation — bridging operational leadership with modern AI analytics.'}
             </p>
             <img src={process.env.PUBLIC_URL + "/projects/infographic.png"} alt="Hatem Kandeel Infographic"
-              loading="lazy" style={{width:'100%', borderRadius:'12px', border:'1px solid rgba(197,168,128,0.3)'}}/>
+              loading="lazy" onClick={() => setLightbox({ src: process.env.PUBLIC_URL + "/projects/infographic.png", alt: "Hatem Kandeel Infographic" })}
+              style={{width:'100%', borderRadius:'12px', border:'1px solid rgba(197,168,128,0.3)', cursor:'pointer'}}/>
           </div>
 
           {/* Mind Map */}
@@ -1877,7 +1959,7 @@ function AppContent() {
             <h3 style={{color:'var(--gold)', fontSize:'1.1rem', letterSpacing:'2px', marginBottom:'30px'}}>
               {isAr ? '🎬 محتوى الفيديو' : '🎬 VIDEO CONTENT'}
             </h3>
-            <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(400px, 1fr))', gap:'30px'}}>
+            <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(400px, 1fr))', gap:'30px'}}>
               {[
                 {
                   title: isAr ? 'معماري النمو' : 'Architect of Growth',
@@ -1934,7 +2016,8 @@ function AppContent() {
               <div style={{display:'grid', gridTemplateColumns: p.images.length > 1 ? 'repeat(2, 1fr)' : '1fr', gap:'8px', alignContent:'start'}}>
                 {p.images.map((img, idx) => (
                   <img key={idx} src={process.env.PUBLIC_URL + img} alt={isAr ? p.titleAr : p.titleEn} loading="lazy"
-                    style={{width:'100%', borderRadius:'8px', border:'1px solid var(--border)', boxShadow:'0 8px 24px var(--shadow-color)'}}/>
+                    onClick={() => setLightbox({ src: process.env.PUBLIC_URL + img, alt: isAr ? p.titleAr : p.titleEn })}
+                    style={{width:'100%', borderRadius:'8px', border:'1px solid var(--border)', boxShadow:'0 8px 24px var(--shadow-color)', cursor:'pointer'}}/>
                 ))}
               </div>
               <div>
@@ -2015,9 +2098,11 @@ function AppContent() {
           <div key={book.id} className="glass-card" style={{borderRadius:'20px', padding: isMobile ? '22px' : '40px', marginBottom:'40px', display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'minmax(220px, 280px) 1fr', gap: isMobile ? '20px' : '40px'}}>
             <div>
               <img src={process.env.PUBLIC_URL + book.cover} alt={isAr ? book.titleAr : book.titleEn}
-                loading="lazy" style={{width:'100%', borderRadius:'10px', boxShadow:'0 10px 30px var(--shadow-color)'}}/>
+                loading="lazy" onClick={() => setLightbox({ src: process.env.PUBLIC_URL + book.cover, alt: isAr ? book.titleAr : book.titleEn })}
+                style={{width:'100%', borderRadius:'10px', boxShadow:'0 10px 30px var(--shadow-color)', cursor:'pointer'}}/>
               <img src={process.env.PUBLIC_URL + (isAr ? book.infographicAr : book.infographicEn)} alt={isAr ? book.titleAr : book.titleEn}
-                loading="lazy" style={{width:'100%', borderRadius:'10px', marginTop:'16px', border:'1px solid var(--border)'}}/>
+                loading="lazy" onClick={() => setLightbox({ src: process.env.PUBLIC_URL + (isAr ? book.infographicAr : book.infographicEn), alt: isAr ? book.titleAr : book.titleEn })}
+                style={{width:'100%', borderRadius:'10px', marginTop:'16px', border:'1px solid var(--border)', cursor:'pointer'}}/>
             </div>
             <div>
               <h3 className="font-serif-ui" style={{fontSize:'1.5rem', fontWeight:700, color:'var(--text)', marginBottom:'14px'}}>
@@ -2304,6 +2389,16 @@ function AppContent() {
       </footer>
 
       {/* Certificate Modal */}
+      {lightbox && (
+        <div onClick={() => setLightbox(null)}
+          style={{position:'fixed', top:0, left:0, width:'100%', height:'100%', backgroundColor:'rgba(0,0,0,0.92)', zIndex:3000, display:'flex', alignItems:'center', justifyContent:'center', padding:'16px', boxSizing:'border-box'}}>
+          <button onClick={() => setLightbox(null)}
+            style={{position:'absolute', top:'16px', right:'16px', width:'40px', height:'40px', borderRadius:'50%', backgroundColor:'rgba(255,255,255,0.1)', border:'1px solid rgba(255,255,255,0.3)', color:'#fff', fontSize:'20px', cursor:'pointer', zIndex:1}}>✕</button>
+          <img src={lightbox.src} alt={lightbox.alt} onClick={e => e.stopPropagation()}
+            style={{maxWidth:'100%', maxHeight:'100%', objectFit:'contain', borderRadius:'8px'}}/>
+        </div>
+      )}
+
       {selectedCert && (
         <div onClick={() => setSelectedCert(null)}
           style={{position:'fixed', top:0, left:0, width:'100%', height:'100%', backgroundColor:'rgba(0,0,0,0.85)', zIndex:2000, display:'flex', alignItems:'center', justifyContent:'center', padding:'20px', boxSizing:'border-box'}}>

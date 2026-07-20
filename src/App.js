@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import emailjs from '@emailjs/browser';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 import { Sun, Moon, Zap, TrendingUp, Users, GraduationCap, LineChart, Play, Pause, MapPin, Phone, Mail, Languages as Languages2, Globe2, Cpu, Target, BarChart3, Menu, X, Plane, MapPinned } from 'lucide-react';
 import './App.css';
@@ -194,11 +195,28 @@ function AppContent() {
     try { localStorage.setItem('hk-theme', theme); } catch {}
   }, [theme]);
   const [contactForm, setContactForm] = useState({ name:'', email:'', subject:'', message:'' });
+  const [contactStatus, setContactStatus] = useState('idle'); // idle | sending | success | error
   const handleContactSubmit = (e) => {
     e.preventDefault();
     const { name, email, subject, message } = contactForm;
-    const body = `${message}\n\n${isAr ? 'من' : 'From'}: ${name} (${email})`;
-    window.location.href = `mailto:hakkandeel@gmail.com?subject=${encodeURIComponent(subject || (isAr ? 'تواصل من الموقع الشخصي' : 'Portfolio Contact'))}&body=${encodeURIComponent(body)}`;
+    setContactStatus('sending');
+    emailjs.send(
+      'service_iomc6qe',
+      'template_otz0ttt',
+      {
+        name: name,
+        email: email,
+        title: subject || (isAr ? 'تواصل من الموقع الشخصي' : 'Portfolio Contact'),
+        message: message,
+        time: new Date().toLocaleString(isAr ? 'ar-EG' : 'en-US'),
+      },
+      { publicKey: 'iFPDatDg5c5LXKTZ3' }
+    ).then(() => {
+      setContactStatus('success');
+      setContactForm({ name:'', email:'', subject:'', message:'' });
+    }).catch(() => {
+      setContactStatus('error');
+    });
   };
   const toggleTheme = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'));
 
@@ -899,7 +917,7 @@ function AppContent() {
           backgroundSize:'56px 56px', maskImage:'linear-gradient(to bottom,black,transparent 75%)', WebkitMaskImage:'linear-gradient(to bottom,black,transparent 75%)'}}/>
 
         <div className="hero-particles">
-          {[...Array(16)].map((_, i) => (
+          {[...Array(isMobile ? 6 : 16)].map((_, i) => (
             <span key={i} className="hero-particle" style={{left:`${(i * 6.3) % 100}%`, animationDuration:`${9 + (i % 5) * 2.4}s`, animationDelay:`${(i * 0.7) % 8}s`}}/>
           ))}
         </div>
@@ -909,7 +927,7 @@ function AppContent() {
         <div className="hero-cloud" style={{width:'190px', height:'60px', top:'8%', right:'30%', animationDuration:'19s', animationDelay:'6s'}}/>
 
         {/* Twinkling stars */}
-        {[...Array(24)].map((_, i) => {
+        {[...Array(isMobile ? 8 : 24)].map((_, i) => {
           const size = 1.5 + (i % 3);
           return <span key={i} className="hero-star" style={{
             width:`${size}px`, height:`${size}px`,
@@ -1187,11 +1205,13 @@ function AppContent() {
 
       {/* ACHIEVEMENTS */}
       <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="achievements" style={{padding:'80px 24px', backgroundColor:'var(--bg-elevated)', borderTop:'1px solid var(--border)', borderBottom:'1px solid var(--border)', position:'relative', overflow:'hidden'}}>
+        {!isMobile && (
         <div className="hero-particles" style={{opacity:.5}}>
           {[...Array(8)].map((_, i) => (
             <span key={i} className="hero-particle" style={{left:`${(i * 12.4) % 100}%`, animationDuration:`${12 + (i % 4) * 3}s`, animationDelay:`${(i * 1.3) % 9}s`}}/>
           ))}
         </div>
+        )}
         <div style={{maxWidth:'1000px', margin:'0 auto'}}>
           <p style={{color:'var(--gold)', letterSpacing:'3px', fontSize:'13px', marginBottom:'10px', textAlign:'center'}}>
             {isAr ? 'النتائج بالأرقام' : 'RESULTS BY THE NUMBERS'}
@@ -1993,11 +2013,13 @@ function AppContent() {
 
       {/* PLATFORMS */}
       <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="platforms" style={{padding:'100px 24px', maxWidth:'1150px', margin:'0 auto', position:'relative', overflow:'hidden'}}>
+        {!isMobile && (
         <div className="hero-particles" style={{opacity:.5}}>
           {[...Array(8)].map((_, i) => (
             <span key={i} className="hero-particle" style={{left:`${(i * 12.4) % 100}%`, animationDuration:`${12 + (i % 4) * 3}s`, animationDelay:`${(i * 1.3) % 9}s`}}/>
           ))}
         </div>
+        )}
         <p style={{color:'var(--gold)', letterSpacing:'3px', fontSize:'13px', marginBottom:'10px', textAlign:'center'}}>
           {isAr ? 'هندسة البرمجيات' : 'SOFTWARE ENGINEERING'}
         </p>
@@ -2268,12 +2290,24 @@ function AppContent() {
                 <textarea required rows={5} value={contactForm.message} onChange={e => setContactForm({...contactForm, message:e.target.value})}
                   style={{width:'100%', padding:'11px 14px', borderRadius:'8px', border:'1px solid var(--border-strong)', background:'var(--bg)', color:'var(--text)', fontSize:'14px', outline:'none', resize:'vertical', fontFamily:'inherit'}}/>
               </div>
-              <button type="submit" className="gold-btn" style={{padding:'13px 34px', fontSize:'13px', width:'100%'}}>
-                {isAr ? 'إرسال الرسالة' : 'Send Message'}
+              <button type="submit" disabled={contactStatus === 'sending'} className="gold-btn" style={{padding:'13px 34px', fontSize:'13px', width:'100%', opacity: contactStatus === 'sending' ? 0.6 : 1, cursor: contactStatus === 'sending' ? 'not-allowed' : 'pointer'}}>
+                {contactStatus === 'sending' ? (isAr ? 'جارٍ الإرسال...' : 'Sending...') : (isAr ? 'إرسال الرسالة' : 'Send Message')}
               </button>
-              <p style={{color:'var(--text-dim)', fontSize:'10px', marginTop:'10px', textAlign:'center'}}>
-                {isAr ? 'سيفتح هذا تطبيق البريد الإلكتروني لديك لإتمام الإرسال' : 'This will open your email app to complete sending'}
-              </p>
+              {contactStatus === 'success' && (
+                <p style={{color:'#4ade80', fontSize:'12px', marginTop:'10px', textAlign:'center', fontWeight:600}}>
+                  {isAr ? '✓ تم إرسال رسالتك بنجاح! هرد عليك في أقرب وقت.' : '✓ Your message was sent successfully! I\'ll get back to you soon.'}
+                </p>
+              )}
+              {contactStatus === 'error' && (
+                <p style={{color:'#f87171', fontSize:'12px', marginTop:'10px', textAlign:'center', fontWeight:600}}>
+                  {isAr ? '✕ حصل خطأ فى الإرسال، ممكن تراسلني مباشرة على hakkandeel@gmail.com' : '✕ Something went wrong. Please email me directly at hakkandeel@gmail.com'}
+                </p>
+              )}
+              {contactStatus === 'idle' && (
+                <p style={{color:'var(--text-dim)', fontSize:'10px', marginTop:'10px', textAlign:'center'}}>
+                  {isAr ? 'هتوصلني رسالتك مباشرة على إيميلي' : "Your message will be sent directly to my email"}
+                </p>
+              )}
             </form>
 
             {/* CONTACT INFO */}

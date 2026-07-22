@@ -1,1 +1,148 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 841.9 595.3"><g fill="#61DAFB"><path d="M666.3 296.5c0-32.5-40.7-63.3-103.1-82.4 14.4-63.6 8-114.2-20.2-130.4-6.5-3.8-14.1-5.6-22.4-5.6v22.3c4.6 0 8.3.9 11.4 2.6 13.6 7.8 19.5 37.5 14.9 75.7-1.1 9.4-2.9 19.3-5.1 29.4-19.6-4.8-41-8.5-63.5-10.9-13.5-18.5-27.5-35.3-41.6-50 32.6-30.3 63.2-46.9 84-46.9V78c-27.5 0-63.5 19.6-99.9 53.6-36.4-33.8-72.4-53.2-99.9-53.2v22.3c20.7 0 51.4 16.5 84 46.6-14 14.7-28 31.4-41.3 49.9-22.6 2.4-44 6.1-63.6 11-2.3-10-4-19.7-5.2-29-4.7-38.2 1.1-67.9 14.6-75.8 3-1.8 6.9-2.6 11.5-2.6V78.5c-8.4 0-16 1.8-22.6 5.6-28.1 16.2-34.4 66.7-19.9 130.1-62.2 19.2-102.7 49.9-102.7 82.3 0 32.5 40.7 63.3 103.1 82.4-14.4 63.6-8 114.2 20.2 130.4 6.5 3.8 14.1 5.6 22.5 5.6 27.5 0 63.5-19.6 99.9-53.6 36.4 33.8 72.4 53.2 99.9 53.2 8.4 0 16-1.8 22.6-5.6 28.1-16.2 34.4-66.7 19.9-130.1 62-19.1 102.5-49.9 102.5-82.3zm-130.2-66.7c-3.7 12.9-8.3 26.2-13.5 39.5-4.1-8-8.4-16-13.1-24-4.6-8-9.5-15.8-14.4-23.4 14.2 2.1 27.9 4.7 41 7.9zm-45.8 106.5c-7.8 13.5-15.8 26.3-24.1 38.2-14.9 1.3-30 2-45.2 2-15.1 0-30.2-.7-45-1.9-8.3-11.9-16.4-24.6-24.2-38-7.6-13.1-14.5-26.4-20.8-39.8 6.2-13.4 13.2-26.8 20.7-39.9 7.8-13.5 15.8-26.3 24.1-38.2 14.9-1.3 30-2 45.2-2 15.1 0 30.2.7 45 1.9 8.3 11.9 16.4 24.6 24.2 38 7.6 13.1 14.5 26.4 20.8 39.8-6.3 13.4-13.2 26.8-20.7 39.9zm32.3-13c5.4 13.4 10 26.8 13.8 39.8-13.1 3.2-26.9 5.9-41.2 8 4.9-7.7 9.8-15.6 14.4-23.7 4.6-8 8.9-16.1 13-24.1zM421.2 430c-9.3-9.6-18.6-20.3-27.8-32 9 .4 18.2.7 27.5.7 9.4 0 18.7-.2 27.8-.7-9 11.7-18.3 22.4-27.5 32zm-74.4-58.9c-14.2-2.1-27.9-4.7-41-7.9 3.7-12.9 8.3-26.2 13.5-39.5 4.1 8 8.4 16 13.1 24 4.7 8 9.5 15.8 14.4 23.4zM420.7 163c9.3 9.6 18.6 20.3 27.8 32-9-.4-18.2-.7-27.5-.7-9.4 0-18.7.2-27.8.7 9-11.7 18.3-22.4 27.5-32zm-74 58.9c-4.9 7.7-9.8 15.6-14.4 23.7-4.6 8-8.9 16-13 24-5.4-13.4-10-26.8-13.8-39.8 13.1-3.1 26.9-5.8 41.2-7.9zm-90.5 125.2c-35.4-15.1-58.3-34.9-58.3-50.6 0-15.7 22.9-35.6 58.3-50.6 8.6-3.7 18-7 27.7-10.1 5.7 19.6 13.2 40 22.5 60.9-9.2 20.8-16.6 41.1-22.2 60.6-9.9-3.1-19.3-6.5-28-10.2zM310 490c-13.6-7.8-19.5-37.5-14.9-75.7 1.1-9.4 2.9-19.3 5.1-29.4 19.6 4.8 41 8.5 63.5 10.9 13.5 18.5 27.5 35.3 41.6 50-32.6 30.3-63.2 46.9-84 46.9-4.5-.1-8.3-1-11.3-2.7zm237.2-76.2c4.7 38.2-1.1 67.9-14.6 75.8-3 1.8-6.9 2.6-11.5 2.6-20.7 0-51.4-16.5-84-46.6 14-14.7 28-31.4 41.3-49.9 22.6-2.4 44-6.1 63.6-11 2.3 10.1 4.1 19.8 5.2 29.1zm38.5-66.7c-8.6 3.7-18 7-27.7 10.1-5.7-19.6-13.2-40-22.5-60.9 9.2-20.8 16.6-41.1 22.2-60.6 9.9 3.1 19.3 6.5 28.1 10.2 35.4 15.1 58.3 34.9 58.3 50.6-.1 15.7-23 35.6-58.4 50.6zM320.8 78.4z"/><circle cx="420.9" cy="296.5" r="45.7"/><path d="M520.5 78.1z"/></g></svg>
+<svg id="logo-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" class="w-full h-full max-w-[480px] max-h-[480px] drop-shadow-xl transition-all duration-300">
+                        <defs>
+                            <!-- Background Gradient -->
+                            <radialGradient id="bg-grad" cx="50%" cy="50%" r="70%">
+                                <stop offset="0%" stop-color="#EDEDEA">
+  </stop>
+                                <stop offset="100%" stop-color="#D7D6D2">
+  </stop>
+                            </radialGradient>
+                            
+                            <!-- Gold Premium Gradient (Metallic) -->
+                            <linearGradient id="gold-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#DFBA6B">
+  </stop>
+                                <stop offset="30%" stop-color="#C29D4E">
+  </stop>
+                                <stop offset="70%" stop-color="#EAD196">
+  </stop>
+                                <stop offset="100%" stop-color="#9E792F">
+  </stop>
+                            </linearGradient>
+
+                            <!-- Blue Premium Gradient (Metallic) -->
+                            <linearGradient id="blue-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#1E4765">
+  </stop>
+                                <stop offset="40%" stop-color="#2D6891">
+  </stop>
+                                <stop offset="75%" stop-color="#4688B5">
+  </stop>
+                                <stop offset="100%" stop-color="#123046">
+  </stop>
+                            </linearGradient>
+
+                            <!-- Subtle Light Blue Gradient for secondary bars -->
+                            <linearGradient id="light-blue-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#3A759E">
+  </stop>
+                                <stop offset="50%" stop-color="#5599C4">
+  </stop>
+                                <stop offset="100%" stop-color="#285675">
+  </stop>
+                            </linearGradient>
+
+                            <!-- Soft Shadow Filter -->
+                            <filter id="logo-shadow" x="-10%" y="-10%" width="120%" height="120%">
+                                <feDropShadow dx="0" dy="6" stdDeviation="6" flood-color="#000000" flood-opacity="0.15">
+  </feDropShadow>
+                            </filter>
+                        </defs>
+
+                        <!-- 1. Canvas Background Layer -->
+                        <rect id="svg-bg" width="800" height="800" fill="url(#bg-grad)">
+  </rect>
+
+                        <!-- 2. Outer Border Frame (Double Gold Line) -->
+                        <rect id="border-outer" x="35" y="35" width="730" height="730" fill="none" stroke="url(#gold-gradient)" stroke-width="3" opacity="0.85">
+  </rect>
+                        <rect id="border-inner" x="43" y="43" width="714" height="714" fill="none" stroke="url(#gold-gradient)" stroke-width="1.2" opacity="0.5">
+  </rect>
+
+                        <!-- Sparkle Diamond Icon in Bottom-Right Corner -->
+                        <g id="sparkle" transform="translate(700, 690) scale(1.1)">
+                            <path d="M0,-10 C0,-2 2,0 10,0 C2,0 0,2 0,10 C0,2 -2,0 -10,0 C-2,0 0,-2 0,-10 Z" fill="url(#gold-gradient)">
+  </path>
+                        </g>
+
+                        <!-- Main Central Logo Content Group -->
+                        <g filter="url(#logo-shadow)" transform="translate(0, -10)">
+                            
+                            <!-- 3. Central Icon Section -->
+                            <g id="icon-group">
+                                <!-- Golden Crescent Pie/Wedge Segment (Right & Bottom Area) -->
+                                <path d="M 400,340 L 493,340 A 108,108 0 0,1 410,448 C 360,448 335,420 335,420 A 130,130 0 0,0 514,310 L 400,340 Z" fill="url(#gold-gradient)">
+  </path>
+                                <path d="M 400,340 L 510,314 A 130,130 0 0,1 498,380 Z" fill="url(#gold-gradient)" opacity="0.9">
+  </path>
+
+                                <!-- Blue Lower Sweep (Main Crescent Base) -->
+                                <path d="M 370,418 C 410,430 455,410 478,380 C 490,364 496,346 496,330 L 452,330 C 452,350 440,370 418,382 C 390,396 360,388 360,388 Z" fill="url(#blue-gradient)">
+  </path>
+
+                                <!-- Blue Left Outer Ring Segment -->
+                                <path d="M 345,392 C 310,350 312,280 354,242 C 390,210 445,210 482,242 L 506,214 C 454,170 376,170 326,215 C 272,263 268,354 316,408 C 322,415 329,421 336,427 L 368,390 C 360,391 352,392 345,392 Z" fill="url(#blue-gradient)">
+  </path>
+
+                                <!-- Bar Chart Elements inside the Ring -->
+                                <!-- Bar 1 (Leftmost, Smallest) -->
+                                <path d="M 345,295 L 365,295 L 365,360 L 345,340 Z" fill="url(#light-blue-gradient)">
+  </path>
+                                <!-- Bar 2 (Middle) -->
+                                <path d="M 378,255 L 398,255 L 398,368 L 378,385 Z" fill="url(#blue-gradient)">
+  </path>
+                                <!-- Bar 3 (Rightmost, Tallest) -->
+                                <path d="M 436,175 L 456,175 L 456,335 L 436,335 Z" fill="url(#blue-gradient)">
+  </path>
+
+                                <!-- Golden Dynamic Arrow (The Zig-Zag Growth Indicator) -->
+                                <g id="golden-arrow">
+                                    <!-- Dynamic gold trail path with gradient fill and proper perspective -->
+                                    <path d="M 320,385 L 354,342 L 400,394 L 434,290 L 510,214 L 476,214 L 526,194 L 526,244 L 515,230 L 442,305 L 400,414 L 350,354 Z" fill="url(#gold-gradient)">
+  </path>
+                                    <!-- Golden Arrow Head detailing -->
+                                    <polygon points="526,194 485,208 502,225 510,214" fill="#FFEAA7" opacity="0.5">
+  </polygon>
+                                </g>
+                            </g>
+
+                            <!-- 4. Typography Elements -->
+                            <!-- Primary Title: HATEM KANDEEL -->
+                            <text id="main-title" x="400" y="525" font-family="'Montserrat', 'Cairo', sans-serif" font-weight="900" font-size="47" fill="#123046" text-anchor="middle" letter-spacing="2.5" class="font-logo-eng transition-all duration-300">HATEM KANDEEL</text>
+
+                            <!-- Sub-Title: PORTFOLIO -->
+                            <text id="sub-title" x="400" y="585" font-family="'Montserrat', 'Cairo', sans-serif" font-weight="800" font-size="34" fill="#123046" text-anchor="middle" letter-spacing="5.5" class="font-logo-eng transition-all duration-300">PORTFOLIO</text>
+
+                            <!-- 5. Fine Art-Deco Geometric Wing Lines underneath text -->
+                            <g id="art-deco-lines" stroke="url(#gold-gradient)" stroke-width="2" fill="none" opacity="0.85" stroke-linecap="round">
+                                <!-- Central Horizontal Base lines -->
+                                <line x1="85" y1="555" x2="225" y2="555">
+  </line>
+                                <line x1="575" y1="555" x2="715" y2="555">
+  </line>
+
+                                <!-- Main descending chevron structure -->
+                                <path d="M 105,575 L 145,575 L 205,605 L 345,605 L 400,650 L 455,605 L 595,605 L 655,575 L 695,575">
+  </path>
+                                <path d="M 125,595 L 175,595 L 235,625 L 365,625 L 400,670 L 435,625 L 565,625 L 625,595 L 675,595">
+  </path>
+                                <path d="M 155,615 L 205,615 L 265,645 L 385,645 L 400,690 L 415,645 L 535,645 L 595,615 L 645,615">
+  </path>
+                                
+                                <!-- Central Grid Intersecting Weaves -->
+                                <line x1="365" y1="625" x2="435" y2="690" stroke-width="1.5" opacity="0.6">
+  </line>
+                                <line x1="435" y1="625" x2="365" y2="690" stroke-width="1.5" opacity="0.6">
+  </line>
+                                <line x1="385" y1="645" x2="415" y2="690" stroke-width="1.5" opacity="0.6">
+  </line>
+                                <line x1="415" y1="645" x2="385" y2="690" stroke-width="1.5" opacity="0.6">
+  </line>
+
+                                <line x1="330" y1="605" x2="365" y2="625">
+  </line>
+                                <line x1="470" y1="605" x2="435" y2="625">
+  </line>
+                            </g>
+                        </g>
+                    </svg>

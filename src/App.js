@@ -160,6 +160,7 @@ class ErrorBoundary extends React.Component {
 function AppContent() {
   const [text, setText] = useState('');
   const [activeSkill, setActiveSkill] = useState(null);
+  const [activeExp, setActiveExp] = useState(0);
   const [activeTab, setActiveTab] = useState('microsoft');
   const [selectedCert, setSelectedCert] = useState(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -1256,28 +1257,6 @@ function AppContent() {
             ))}
           </div>
 
-          {/* CAREER TIMELINE */}
-          <div style={{marginTop:'70px'}}>
-            <h3 className="font-serif-ui" style={{fontSize:'1.4rem', fontWeight:700, marginBottom:'36px', textAlign:'center', color:'var(--text)'}}>
-              {isAr ? 'رحلة من الإتقان التشغيلي' : 'A Journey of Operational Mastery'}
-            </h3>
-            <div style={{position:'relative', paddingLeft: isAr ? 0 : '20px', paddingRight: isAr ? '20px' : 0}}>
-              <div style={{position:'absolute', top:0, bottom:0, left: isAr ? 'auto' : '29px', right: isAr ? '29px' : 'auto', width:'2px', background:'linear-gradient(var(--border-strong), transparent)'}}/>
-              {[...experiences].reverse().map((exp, i) => (
-                <div key={i} style={{display:'flex', gap:'20px', marginBottom:'26px', position:'relative'}}>
-                  <div style={{flexShrink:0, width:'18px', height:'18px', borderRadius:'50%', background:'var(--bg)', border:'3px solid var(--gold)', marginTop:'4px', zIndex:1}}/>
-                  <div className="glass-card" style={{borderRadius:'12px', padding:'16px 20px', flex:1}}>
-                    <div style={{display:'flex', justifyContent:'space-between', flexWrap:'wrap', gap:'8px', marginBottom:'4px'}}>
-                      <span style={{color:'var(--text)', fontWeight:700, fontSize:'14px'}}>{exp.title}</span>
-                      <span style={{color:'var(--gold)', fontSize:'12px', fontWeight:600}}>{exp.period}</span>
-                    </div>
-                    <span style={{color:'var(--text-muted)', fontSize:'12px'}}>{exp.company}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* Ready-made Career Infographic */}
           <div style={{marginTop:'50px'}}>
             <img src={process.env.PUBLIC_URL + (isAr ? "/images/growth-story-ar.jpg" : "/images/growth-story-en.jpg")}
@@ -1355,16 +1334,24 @@ function AppContent() {
                     <div style={{width:'12px', height:'12px', borderRadius:'50%', backgroundColor:'var(--gold)'}}/>
                   </div>
                 )}
-                <div className="glass-card timeline-node" style={{borderRadius:'12px', padding: isMobile ? '18px 16px' : '25px 30px', flex:1, borderTop: isMobile ? '3px solid var(--gold)' : undefined, minWidth:0}}>
-                  <span style={{color:'var(--gold)', fontSize:'12px', letterSpacing:'2px'}}>{exp.period}</span>
-                  <h3 style={{fontSize:'1.2rem', fontWeight:'700', margin:'8px 0 4px', color:'var(--text)'}}>{exp.title}</h3>
-                  <p style={{color:'var(--gold)', fontSize:'14px', marginBottom:'4px'}}>{exp.company}</p>
-                  <p style={{color:'var(--text-dim)', fontSize:'12px', marginBottom:'15px'}}>{exp.location}</p>
-                  <ul style={{paddingLeft: isAr ? '0' : '20px', paddingRight: isAr ? '20px' : '0', margin:0}}>
-                    {exp.points.map((point, i) => (
-                      <li key={i} style={{color:'var(--text-muted)', fontSize:'0.9rem', lineHeight:'1.8', marginBottom:'6px'}}>{point}</li>
-                    ))}
-                  </ul>
+                <div className="glass-card timeline-node" onClick={() => setActiveExp(activeExp === index ? null : index)}
+                  style={{borderRadius:'12px', padding: isMobile ? '18px 16px' : '25px 30px', flex:1, borderTop: isMobile ? '3px solid var(--gold)' : undefined, minWidth:0, cursor:'pointer'}}>
+                  <div style={{display:'flex', justifyContent:'space-between', alignItems:'flex-start', gap:'10px'}}>
+                    <div>
+                      <span style={{color:'var(--gold)', fontSize:'12px', letterSpacing:'2px'}}>{exp.period}</span>
+                      <h3 style={{fontSize:'1.2rem', fontWeight:'700', margin:'8px 0 4px', color:'var(--text)'}}>{exp.title}</h3>
+                      <p style={{color:'var(--gold)', fontSize:'14px', marginBottom:'4px'}}>{exp.company}</p>
+                      <p style={{color:'var(--text-dim)', fontSize:'12px', marginBottom: activeExp === index ? '15px' : '0'}}>{exp.location}</p>
+                    </div>
+                    <span style={{color:'var(--gold)', fontSize:'18px', flexShrink:0, transition:'transform 0.3s', transform: activeExp === index ? 'rotate(180deg)' : 'rotate(0deg)'}}>▾</span>
+                  </div>
+                  {activeExp === index && (
+                    <ul style={{paddingLeft: isAr ? '0' : '20px', paddingRight: isAr ? '20px' : '0', margin:0}}>
+                      {exp.points.map((point, i) => (
+                        <li key={i} style={{color:'var(--text-muted)', fontSize:'0.9rem', lineHeight:'1.8', marginBottom:'6px'}}>{point}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
               </div>
             ))}
@@ -1476,6 +1463,46 @@ function AppContent() {
               {isAr ? `👉 مرر لعرض ${certificates[activeTab].length} شهادة` : `👉 Swipe to browse ${certificates[activeTab].length} certificates`}
             </p>
           )}
+        </div>
+      </motion.section>
+
+      {/* INTERNAL TRAININGS (no certificates) */}
+      <motion.section initial={{opacity:0, y:36}} whileInView={{opacity:1, y:0}} viewport={{once:true, amount:0}} transition={{duration:0.7, ease:[0.16,1,0.3,1]}} id="internal-trainings" style={{padding: isMobile ? '60px 16px' : '90px 40px', backgroundColor:'var(--bg)'}}>
+        <div style={{maxWidth:'900px', margin:'0 auto'}}>
+          <p style={{color:'var(--gold)', letterSpacing:'3px', fontSize:'13px', marginBottom:'10px', textAlign:'center'}}>
+            {isAr ? 'من بداية مسيرتي المهنية' : 'FROM THE START OF MY CAREER'}
+          </p>
+          <h2 style={{fontSize:'2rem', fontWeight:'700', marginBottom:'12px', textAlign:'center', background:'linear-gradient(135deg, var(--gold-bright), var(--gold))', WebkitBackgroundClip:'text', WebkitTextFillColor:'transparent'}}>
+            {isAr ? 'تدريبات داخلية متخصصة' : 'Specialized Internal Training'}
+          </h2>
+          <p style={{color:'var(--text-muted)', textAlign:'center', marginBottom:'40px', fontSize:'0.9rem', maxWidth:'640px', marginLeft:'auto', marginRight:'auto', lineHeight:'1.8'}}>
+            {isAr
+              ? 'تدريبات عملية متخصصة تلقيتها أثناء عملي في مشروع مجالس المياه (WBP) ومشروع الخدمات الزراعية (EDASP) بالتعاون مع البنك الدولي وإيفاد — تدريبات داخلية بدون شهادات معتمدة، لكنها شكّلت أساس خبرتي الميدانية الأولى.'
+              : 'Hands-on training received during my work on the Water Boards Project (WBP) and the Agricultural Services Project (EDASP), in cooperation with the World Bank and IFAD — internal training without formal certificates, but foundational to my early field experience.'}
+          </p>
+          <div style={{display:'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(280px, 1fr))', gap:'16px'}}>
+            {[
+              { titleEn:'Financial & Administrative Management of Water Boards', titleAr:'الإدارة المالية والإدارية لمجالس المياه', orgEn:'WBP Project', orgAr:'مشروع مجالس المياه (WBP)', date: 'Nov 2002' },
+              { titleEn:'Solving Irrigation and Drainage Problems', titleAr:'حل مشكلات الري والصرف', orgEn:'Nile Center for Media', orgAr:'مركز النيل الإعلامي', date: 'Nov 2001' },
+              { titleEn:'Communication Skills & Present and Implement a Business Plan', titleAr:'مهارات التواصل وعرض وتنفيذ خطة عمل', orgEn:'EDASP', orgAr:'مشروع الخدمات الزراعية (EDASP)', date: 'Apr 2003' },
+              { titleEn:'How to Conduct Field Research', titleAr:'كيفية إجراء البحث الميداني', orgEn:'ARP Project — Bari Institute', orgAr:'مشروع ARP — معهد باري', date: 'Mar 2004' },
+              { titleEn:'Develop Work Plan, Regulations, and Laws', titleAr:'إعداد خطة العمل واللوائح والقوانين', orgEn:'EDASP', orgAr:'مشروع الخدمات الزراعية (EDASP)', date: 'May 2005' },
+              { titleEn:'Follow-up and Evaluation', titleAr:'المتابعة والتقييم', orgEn:'EDASP · Ministry of Agriculture · World Bank · IFAD', orgAr:'EDASP · وزارة الزراعة · البنك الدولي · إيفاد', date: 'Sep 2005' },
+              { titleEn:'Customs Clearance Work', titleAr:'أعمال التخليص الجمركي', orgEn:'Central Administration for Customs Organization', orgAr:'الإدارة المركزية لتنظيم الجمارك', date: 'Feb 2006' },
+              { titleEn:'Methods & Tools for Planning the Development of Modern Societies', titleAr:'أساليب وأدوات تخطيط تنمية المجتمعات الحديثة', orgEn:'EDASP', orgAr:'مشروع الخدمات الزراعية (EDASP)', date: 'Nov 2006' },
+            ].map((t, i) => (
+              <div key={i} className="glass-card" style={{borderRadius:'12px', padding:'18px 20px', display:'flex', gap:'14px', alignItems:'flex-start'}}>
+                <div style={{width:'34px', height:'34px', borderRadius:'50%', background:'rgba(197,168,128,0.12)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0, marginTop:'2px'}}>
+                  <GraduationCap size={16} color="var(--gold)"/>
+                </div>
+                <div>
+                  <p style={{color:'var(--text)', fontSize:'13px', fontWeight:700, lineHeight:'1.5', marginBottom:'4px'}}>{isAr ? t.titleAr : t.titleEn}</p>
+                  <p style={{color:'var(--gold)', fontSize:'11px', marginBottom:'2px'}}>{isAr ? t.orgAr : t.orgEn}</p>
+                  <p style={{color:'var(--text-dim)', fontSize:'10px'}}>{t.date}</p>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </motion.section>
 
@@ -2264,7 +2291,7 @@ function AppContent() {
           <div style={{display:'grid', gridTemplateColumns:'repeat(auto-fit, minmax(340px, 1fr))', gap:'40px', alignItems:'start'}}>
 
             {/* MESSAGE FORM */}
-            <form onSubmit={handleContactSubmit} className="glass-card" style={{borderRadius:'16px', padding:'36px', minWidth:'280px'}}>
+            <form id="contactForm" onSubmit={handleContactSubmit} className="glass-card" style={{borderRadius:'16px', padding:'36px', minWidth:'280px'}}>
               <h3 className="font-serif-ui" style={{color:'var(--text)', fontSize:'1.2rem', fontWeight:700, marginBottom:'22px'}}>
                 {isAr ? 'أرسل رسالة' : 'Send a Message'}
               </h3>
@@ -2324,6 +2351,12 @@ function AppContent() {
                     </div>
                   </div>
                 </a>
+                <p style={{fontSize:'10px', color:'var(--text-dim)', textAlign:'center', margin:'-8px 0 4px'}}>
+                  {isAr ? 'البريد مش بيفتحلك؟ ' : "Email not opening? "}
+                  <a href="#contactForm" style={{color:'var(--gold)', textDecoration:'underline'}}>
+                    {isAr ? 'املأ نموذج الرسالة' : 'fill in the message form'}
+                  </a>
+                </p>
 
                 <a href="https://wa.me/201036836343" target="_blank" rel="noopener noreferrer" style={{textDecoration:'none'}}>
                   <div className="glass-card" style={{borderRadius:'12px', padding:'20px 24px', display:'flex', alignItems:'center', gap:'18px'}}>
